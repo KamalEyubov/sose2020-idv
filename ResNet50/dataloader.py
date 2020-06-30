@@ -24,6 +24,7 @@ import skimage
 from PIL import ImageFile
 from PIL import Image
 from sklearn.preprocessing import normalize
+from evaluation import *
 
 torch.cuda.empty_cache()
 
@@ -189,7 +190,61 @@ def val(epoch):
     # Write to tensorboard
 #     writer.add_scalar('Test Accuracy', 100.0 * correct / len(test_loader.dataset), epoch)
 
+def test(epoch):
 
+    model.eval()
+    test_loss = 0
+    correct = 0
+    results = []
+
+    TP = 0
+    TN = 0
+    FN = 0
+    FP = 0
+
+
+    criteria = nn.CrossEntropyLoss()
+    # Don't update model
+    with torch.no_grad():
+        tpr_list = []
+        fpr_list = []
+
+        predlist=[]
+        scorelist=[]
+        targetlist=[]
+        # Predict
+        for batch_index, batch_samples in enumerate(test_loader):
+            data, target = batch_samples['img'].to(device), batch_samples['label'].to(device)
+#             data = data[:, 0, :, :]
+#             data = data[:, None, :, :]
+#             print(target)
+            output = model(data)
+
+            test_loss += criteria(output, target.long())
+            score = F.softmax(output, dim=1)
+            pred = output.argmax(dim=1, keepdim=True)
+#             print('target',target.long()[:, 2].view_as(pred))
+            correct += pred.eq(target.long().view_as(pred)).sum().item()
+#             TP += ((pred == 1) & (target.long()[:, 2].view_as(pred).data == 1)).cpu().sum()
+#             TN += ((pred == 0) & (target.long()[:, 2].view_as(pred) == 0)).cpu().sum()
+# #             # FN    predict 0 label 1
+#             FN += ((pred == 0) & (target.long()[:, 2].view_as(pred) == 1)).cpu().sum()
+# #             # FP    predict 1 label 0
+#             FP += ((pred == 1) & (target.long()[:, 2].view_as(pred) == 0)).cpu().sum()
+#             print(TP,TN,FN,FP)
+
+
+#             print(output[:,1].cpu().numpy())
+#             print((output[:,1]+output[:,0]).cpu().numpy())
+#             predcpu=(output[:,1].cpu().numpy())/((output[:,1]+output[:,0]).cpu().numpy())
+            targetcpu=target.long().cpu().numpy()
+            predlist=np.append(predlist, pred.cpu().numpy())
+            scorelist=np.append(scorelist, score.cpu().numpy()[:,1])
+            targetlist=np.append(targetlist,targetcpu)
+    return targetlist, scorelist, predlist
+
+    # Write to tensorboard
+#     writer.add_scalar('Test Accuracy', 100.0 * correct / len(test_loader.dataset), epoch)
 
 
 if __name__ == '__main__':
@@ -330,17 +385,11 @@ if __name__ == '__main__':
         vote_pred = vote_pred + predlist
         vote_score = vote_score + scorelist
 
-        confusion = confusion_matrix(targetlist, predlist)
-        normConfusion = confusion/np.linalg.norm(confusion)
-        print(confusion)
-        print(normConfusion)
-        tickmarks = np.arange(normConfusion.shape[0])
-        plt.imshow(normConfusion)
-        plt.yticks(tickmarks,['Non_Covid', 'Covid'])
-        plt.xticks(tickmarks,['Non_Covid', 'Covid'])
-        plt.ylabel('True label')
-        plt.xlabel('Predicted label')
-        plt.savefig('confusion.png')
+
+        eval = Evaluation(vote_pred, votenum, vote_score, targetlist, predlist, valset, 'train')
+        eval.plotEval()
+        eval.plotConfusion()
+
 
         if epoch % votenum == 0:
 
@@ -388,3 +437,59 @@ if __name__ == '__main__':
     # average F1: {:.4f}, average accuracy: {:.4f}, average AUC: {:.4f}'.format(
     #         epoch, r, p, F1, acc, AUC))
     #         f.close()
+
+    # test
+    bs = 10
+    import warnings
+    warnings.filterwarnings('ignore')
+
+    epoch = 1
+    # r_list = []
+    # p_list = []
+    # acc_list = []
+    # AUC_list = []
+    # TP = 0
+    # TN = 0
+    # FN = 0
+    # FP = 0
+    vote_pred = np.zeros(testset.__len__())
+    vote_score = np.zeros(testset.__len__())
+
+
+    targetlist, scorelist, predlist = test(epoch)
+
+    eval = Evaluation(vote_pred, votenum, vote_score, targetlist, predlist, valset, 'test')
+    eval.plotEval()
+    eval.plotConfusion()
+    # print('target',targetlist)
+    # print('score',scorelist)
+    # print('predict',predlist)
+    # vote_pred = vote_pred + predlist
+    # vote_score = vote_score + scorelist
+    #
+    # TP = ((predlist == 1) & (targetlist == 1)).sum()
+    #
+    # TN = ((predlist == 0) & (targetlist == 0)).sum()
+    # FN = ((predlist == 0) & (targetlist == 1)).sum()
+    # FP = ((predlist == 1) & (targetlist == 0)).sum()
+    #
+    # print('TP=',TP,'TN=',TN,'FN=',FN,'FP=',FP)
+    # print('TP+FP',TP+FP)
+    # p = TP / (TP + FP)
+    # print('precision',p)
+    # p = TP / (TP + FP)
+    # r = TP / (TP + FN)
+    # print('recall',r)
+    # F1 = 2 * r * p / (r + p)
+    # acc = (TP + TN) / (TP + TN + FP + FN)
+    # print('F1',F1)
+    # print('acc',acc)
+    # AUC = roc_auc_score(targetlist, vote_score)
+    # print('AUC', AUC)
+
+    # f = open(f'model_result/medical_transfer/test_{modelname}_{alpha_name}_LUNA_moco_CT_moco.txt', 'a+')
+    # f.write('\n The epoch is {}, average recall: {:.4f}, average precision: {:.4f},\
+    # average F1: {:.4f}, average accuracy: {:.4f}, average AUC: {:.4f}'.format(
+    # epoch, r, p, F1, acc, AUC))
+    # f.close()
+    # torch.save(model.state_dict(), "model_backup/medical_transfer/{}_{}_covid_moco_covid.pt".format(modelname,alpha_name))

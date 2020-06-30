@@ -1,2 +1,6 @@
 #ignore data folder
 data
+#ignore pics
+*.png
+#ignore pycache
+__pycache__/
