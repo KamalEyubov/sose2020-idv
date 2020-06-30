@@ -394,43 +394,43 @@ if __name__ == '__main__':
         if epoch % votenum == 0:
 
             # major vote
-            vote_pred[vote_pred <= (votenum/2)] = 0
-            vote_pred[vote_pred > (votenum/2)] = 1
-            vote_score = vote_score/votenum
-
-            print('vote_pred', vote_pred)
-            print('targetlist', targetlist)
-            TP = ((vote_pred == 1) & (targetlist == 1)).sum()
-            TN = ((vote_pred == 0) & (targetlist == 0)).sum()
-            FN = ((vote_pred == 0) & (targetlist == 1)).sum()
-            FP = ((vote_pred == 1) & (targetlist == 0)).sum()
-
-
-            print('TP=',TP,'TN=',TN,'FN=',FN,'FP=',FP)
-            print('TP+FP',TP+FP)
-            p = TP / (TP + FP)
-            print('precision',p)
-            p = TP / (TP + FP)
-            r = TP / (TP + FN)
-            print('recall',r)
-            F1 = 2 * r * p / (r + p)
-            acc = (TP + TN) / (TP + TN + FP + FN)
-            print('F1',F1)
-            print('acc',acc)
-            AUC = roc_auc_score(targetlist, vote_score)
-            print('AUCp', roc_auc_score(targetlist, vote_pred))
-            print('AUC', AUC)
-
-
-
-    #         if epoch == total_epoch:
-            torch.save(model.state_dict(), "model_backup/medical_transfer/{}_{}_covid_moco_covid.pt".format(modelname,alpha_name))
-
-            vote_pred = np.zeros(valset.__len__())
-            vote_score = np.zeros(valset.__len__())
-            print('\n The epoch is {}, average recall: {:.4f}, average precision: {:.4f},\
-    average F1: {:.4f}, average accuracy: {:.4f}, average AUC: {:.4f}'.format(
-            epoch, r, p, F1, acc, AUC))
+    #         vote_pred[vote_pred <= (votenum/2)] = 0
+    #         vote_pred[vote_pred > (votenum/2)] = 1
+    #         vote_score = vote_score/votenum
+    #
+    #         print('vote_pred', vote_pred)
+    #         print('targetlist', targetlist)
+    #         TP = ((vote_pred == 1) & (targetlist == 1)).sum()
+    #         TN = ((vote_pred == 0) & (targetlist == 0)).sum()
+    #         FN = ((vote_pred == 0) & (targetlist == 1)).sum()
+    #         FP = ((vote_pred == 1) & (targetlist == 0)).sum()
+    #
+    #
+    #         print('TP=',TP,'TN=',TN,'FN=',FN,'FP=',FP)
+    #         print('TP+FP',TP+FP)
+    #         p = TP / (TP + FP)
+    #         print('precision',p)
+    #         p = TP / (TP + FP)
+    #         r = TP / (TP + FN)
+    #         print('recall',r)
+    #         F1 = 2 * r * p / (r + p)
+    #         acc = (TP + TN) / (TP + TN + FP + FN)
+    #         print('F1',F1)
+    #         print('acc',acc)
+    #         AUC = roc_auc_score(targetlist, vote_score)
+    #         print('AUCp', roc_auc_score(targetlist, vote_pred))
+    #         print('AUC', AUC)
+    #
+    #
+    #
+    # #         if epoch == total_epoch:
+    #         torch.save(model.state_dict(), "model_backup/medical_transfer/{}_{}_covid_moco_covid.pt".format(modelname,alpha_name))
+    #
+    #         vote_pred = np.zeros(valset.__len__())
+    #         vote_score = np.zeros(valset.__len__())
+    #         print('\n The epoch is {}, average recall: {:.4f}, average precision: {:.4f},\
+    # average F1: {:.4f}, average accuracy: {:.4f}, average AUC: {:.4f}'.format(
+    #         epoch, r, p, F1, acc, AUC))
 
     #         f = open('model_result/medical_transfer/{}_{}.txt'.format(modelname,alpha_name), 'a+')
     #         f.write('\n The epoch is {}, average recall: {:.4f}, average precision: {:.4f},\
