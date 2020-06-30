@@ -609,6 +609,7 @@ class ResNet(nn.Module):
                                 norm_layer=norm_layer))
 
         return nn.Sequential(*layers)
+        
     def change_cls_number(self,num_classes):
         print("Changing Full Connected")
         self.fc = nn.Linear(512 * self.block.expansion, num_classes)
