@@ -59,22 +59,3 @@ class Evaluation:
         plt.ylabel('True label')
         plt.xlabel('Predicted label')
         plt.savefig('confusion_'+self.mode+'.png')
-
-
-
-
-
-# print('TP=',TP,'TN=',TN,'FN=',FN,'FP=',FP)
-# print('TP+FP',TP+FP)
-# p = TP / (TP + FP)
-# print('precision',p)
-# p = TP / (TP + FP)
-# r = TP / (TP + FN)
-# print('recall',r)
-# F1 = 2 * r * p / (r + p)
-# acc = (TP + TN) / (TP + TN + FP + FN)
-# print('F1',F1)
-# print('acc',acc)
-# AUC = roc_auc_score(targetlist, vote_score)
-# print('AUCp', roc_auc_score(targetlist, vote_pred))
-# print('AUC', AUC)
