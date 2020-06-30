@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 class Evaluation:
-    def __init__(self, vote_pred, votenum, vote_score, targetlist, predlist, valset, mode):
+    def __init__(self, vote_pred, votenum, vote_score, targetlist, predlist, mode):
         self.vote_pred = vote_pred
         self.vote_score = vote_score
         self.vote_pred[vote_pred <= (votenum/2)] = 0

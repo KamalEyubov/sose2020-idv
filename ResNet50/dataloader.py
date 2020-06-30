@@ -386,7 +386,7 @@ if __name__ == '__main__':
         vote_score = vote_score + scorelist
 
 
-        eval = Evaluation(vote_pred, votenum, vote_score, targetlist, predlist, valset, 'train')
+        eval = Evaluation(vote_pred, votenum, vote_score, targetlist, predlist, 'train')
         eval.plotEval()
         eval.plotConfusion()
 
@@ -458,7 +458,7 @@ if __name__ == '__main__':
 
     targetlist, scorelist, predlist = test(epoch)
 
-    eval = Evaluation(vote_pred, votenum, vote_score, targetlist, predlist, valset, 'test')
+    eval = Evaluation(vote_pred, votenum, vote_score, targetlist, predlist, 'test')
     eval.plotEval()
     eval.plotConfusion()
     # print('target',targetlist)
