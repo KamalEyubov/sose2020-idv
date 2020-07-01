@@ -12,8 +12,7 @@ class Evaluation:
 
         self.targetlist = targetlist
         self.predlist = predlist
-        # print('vote_pred', vote_pred)
-        # print('targetlist', targetlist)
+
         self.TP = ((vote_pred == 1) & (targetlist == 1)).sum()
         self.TN = ((vote_pred == 0) & (targetlist == 0)).sum()
         self.FN = ((vote_pred == 0) & (targetlist == 1)).sum()
@@ -50,7 +49,6 @@ class Evaluation:
 
     def plotConfusion(self):
         confusion = self.getConfusion()
-        print(confusion)
         tickmarks = np.arange(confusion.shape[0])
         fig = plt.subplots()
         plt.imshow(confusion)
