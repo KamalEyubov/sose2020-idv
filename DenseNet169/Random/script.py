@@ -12,7 +12,22 @@ import numpy as np
 from torch.utils.data import DataLoader, Dataset
 from sklearn.metrics import roc_auc_score
 
+
 torch.cuda.empty_cache()
+
+device = 'cpu'
+batchsize = 16
+train_epochs = 50
+test_epochs = 1
+
+
+### DenseNet
+
+model = DenseNet169(num_classes=2)
+if device == 'cuda':
+    model = model.cuda()
+modelname = 'DenseNet169'
+# print(model)
 
 
 normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
@@ -84,9 +99,6 @@ class CovidCTDataset(Dataset):
 
 
 
-
-batchsize=10
-
 if __name__ == '__main__':
         trainset = CovidCTDataset(root_dir='../../Images',
                                                           txt_COVID='../../Data-split/COVID/trainCT_COVID.txt',
@@ -100,16 +112,14 @@ if __name__ == '__main__':
                                                           txt_COVID='../../Data-split/COVID/testCT_COVID.txt',
                                                           txt_NonCOVID='../../Data-split/NonCOVID/testCT_NonCOVID.txt',
                                                           transform=val_transformer)
-        print(trainset.__len__())
-        print(valset.__len__())
-        print(testset.__len__())
+        print("trainset length:", trainset.__len__())
+        print("valset length:", valset.__len__())
+        print("testset length:", testset.__len__())
 
         train_loader = DataLoader(trainset, batch_size=batchsize, drop_last=False, shuffle=True)
         val_loader = DataLoader(valset, batch_size=batchsize, drop_last=False, shuffle=False)
         test_loader = DataLoader(testset, batch_size=batchsize, drop_last=False, shuffle=False)
 
-
-device = 'cuda'
 
 def train(optimizer, epoch):
         
@@ -121,37 +131,37 @@ def train(optimizer, epoch):
         for batch_index, batch_samples in enumerate(train_loader):
                 
                 # move data to device
-                data, target = batch_samples['img'].to(device), batch_samples['label'].to(device);
-
-
-                optimizer.zero_grad()
+                data, target = batch_samples['img'].to(device), batch_samples['label'].to(device)
                 output = model(data)
                 
                 criteria = nn.CrossEntropyLoss()
                 loss = criteria(output, target.long())
-                train_loss += criteria(output, target.long())
+                train_loss += loss.item()
                 
                 optimizer.zero_grad()
                 loss.backward()
                 optimizer.step()
-                
-                pred = output.argmax(dim=1, keepdim=True)
-                train_correct += pred.eq(target.long().view_as(pred)).sum().item()
+
+                pred = output.argmax(dim=1)
+                train_correct += (pred == target).sum().item()
         
                 # Display progress
                 if batch_index % bs == 0:
                         print('Train Epoch: {} [{}/{} ({:.0f}%)]\tTrain Loss: {:.6f}'.format(
-                                epoch, batch_index, len(train_loader),
-                                100.0 * batch_index / len(train_loader), loss.item() / bs))
+                                epoch,
+                                batch_index, len(train_loader),
+                                100.0 * batch_index / len(train_loader),
+                                loss.item() / bs))
         
-        print('\nTrain set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
-                train_loss/len(train_loader.dataset), train_correct, len(train_loader.dataset),
+        print('Train set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
+                train_loss / len(train_loader.dataset),
+                train_correct, len(train_loader.dataset),
                 100.0 * train_correct / len(train_loader.dataset)))
-        f = open('model_result/{}.txt'.format(modelname), 'a+')
+        f = open('model_result/train_{}.txt'.format(modelname), 'a+')
         f.write('Train set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
-                train_loss/len(train_loader.dataset), train_correct, len(train_loader.dataset),
+                train_loss / len(train_loader.dataset),
+                train_correct, len(train_loader.dataset),
                 100.0 * train_correct / len(train_loader.dataset)))
-        f.write('\n')
         f.close()
 
 
@@ -207,37 +217,25 @@ def test(epoch):
         return targetlist, scorelist, predlist
 
 
-### DenseNet
-
-model = DenseNet169(num_classes=2)
-model = model.cuda()
-modelname = 'DenseNet169'
-# print(model)
-
-
 # train
+print('training')
 bs = 10
 votenum = 10
 import warnings
 warnings.filterwarnings('ignore')
 
-r_list = []
-p_list = []
-acc_list = []
-AUC_list = []
 vote_pred = np.zeros(valset.__len__())
 vote_score = np.zeros(valset.__len__())
 
 optimizer = optim.Adam(model.parameters(), lr=0.0001)
 scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=10)
 
-total_epoch = 3000
-for epoch in range(1, total_epoch + 1):
+for epoch in range(1, train_epochs + 1):
         train(optimizer, epoch)
         
         targetlist, scorelist, predlist = val(epoch)
-        vote_pred = vote_pred + predlist 
-        vote_score = vote_score + scorelist 
+        vote_pred = vote_pred + predlist
+        vote_score = vote_score + scorelist
 
         if epoch % votenum == 0:
                 
@@ -245,14 +243,11 @@ for epoch in range(1, total_epoch + 1):
                 vote_pred[vote_pred <= (votenum/2)] = 0
                 vote_pred[vote_pred > (votenum/2)] = 1
                 vote_score = vote_score/votenum
-                
-                print('vote_pred', vote_pred)
-                print('targetlist', targetlist)
+
                 TP = ((vote_pred == 1) & (targetlist == 1)).sum()
                 TN = ((vote_pred == 0) & (targetlist == 0)).sum()
                 FN = ((vote_pred == 0) & (targetlist == 1)).sum()
                 FP = ((vote_pred == 1) & (targetlist == 0)).sum()
-                
                 
                 print('TP=',TP,'TN=',TN,'FN=',FN,'FP=',FP)
                 print('TP+FP',TP+FP)
@@ -269,34 +264,28 @@ for epoch in range(1, total_epoch + 1):
                 print('AUCp', roc_auc_score(targetlist, vote_pred))
                 print('AUC', AUC)
                 
-
-                torch.save(model.state_dict(), "model_backup/{}.pt".format(modelname))  
+                torch.save(model.state_dict(), "model_backup/{}_{}.pt".format(modelname, epoch))  
                 
                 vote_pred = np.zeros(valset.__len__())
                 vote_score = np.zeros(valset.__len__())
-                print('\n The epoch is {}, average recall: {:.4f}, average precision: {:.4f},average F1: {:.4f}, average accuracy: {:.4f}, average AUC: {:.4f}'.format(
-                epoch, r, p, F1, acc, AUC))
+                print('The epoch is {}, average recall: {:.4f}, average precision: {:.4f}, average F1: {:.4f}, average accuracy: {:.4f}, average AUC: {:.4f}\n\n'.format(epoch, r, p, F1, acc, AUC))
 
-                f = open('model_result/{}.txt'.format(modelname), 'a+')
-                f.write('\n The epoch is {}, average recall: {:.4f}, average precision: {:.4f},average F1: {:.4f}, average accuracy: {:.4f}, average AUC: {:.4f}'.format(
+                f = open('model_result/train_{}.txt'.format(modelname), 'a+')
+                f.write('The epoch is {}, average recall: {:.4f}, average precision: {:.4f}, average F1: {:.4f}, average accuracy: {:.4f}, average AUC: {:.4f}\n\n'.format(
                 epoch, r, p, F1, acc, AUC))
                 f.close()
 
 
 # test
+print('testing')
 bs = 10
 import warnings
 warnings.filterwarnings('ignore')
 
-r_list = []
-p_list = []
-acc_list = []
-AUC_list = []
 vote_pred = np.zeros(testset.__len__())
 vote_score = np.zeros(testset.__len__())
 
-total_epoch = 10
-for epoch in range(1, total_epoch+1):
+for epoch in range(1, test_epochs+1):
         
         targetlist, scorelist, predlist = test(epoch)
         vote_pred = vote_pred + predlist 
@@ -346,14 +335,11 @@ for epoch in range(1, total_epoch+1):
                 AUC = roc_auc_score(targetlist, vote_score)
                 print('AUC', AUC)
                 
-                
                 vote_pred = np.zeros((1,testset.__len__()))
                 vote_score = np.zeros(testset.__len__())
-                print('vote_pred',vote_pred)
-                print('\n The epoch is {}, average recall: {:.4f}, average precision: {:.4f},average F1: {:.4f}, average accuracy: {:.4f}, average AUC: {:.4f}'.format(
-                epoch, r, p, F1, acc, AUC))
+                print('The epoch is {}, average recall: {:.4f}, average precision: {:.4f}, average F1: {:.4f}, average accuracy: {:.4f}, average AUC: {:.4f}\n'.format(epoch, r, p, F1, acc, AUC))
 
-                f = open('model_result/test_{modelname}.txt', 'a+')
-                f.write('\n The epoch is {}, average recall: {:.4f}, average precision: {:.4f},average F1: {:.4f}, average accuracy: {:.4f}, average AUC: {:.4f}'.format(
+                f = open('model_result/test_{}.txt'.format(modelname), 'a+')
+                f.write('The epoch is {}, average recall: {:.4f}, average precision: {:.4f}, average F1: {:.4f}, average accuracy: {:.4f}, average AUC: {:.4f}\n'.format(
                 epoch, r, p, F1, acc, AUC))
                 f.close()
