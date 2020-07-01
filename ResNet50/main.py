@@ -1,11 +1,11 @@
-import torch
+#import torch
 import torchvision
 import torchvision.transforms as transforms
 import torchvision.datasets as datasets
 import torch.nn.functional as F
 import torch.nn as nn
 import torch.optim as optim
-import os
+#import os
 import matplotlib.pyplot as plt
 from torch.optim.lr_scheduler import StepLR
 import numpy as np
@@ -14,7 +14,7 @@ import pandas as pd
 import random
 from torchvision.datasets import ImageFolder
 import re
-from torch.utils.data import Dataset, DataLoader
+from torch.utils.data import  DataLoader
 import matplotlib.pyplot as plt
 from PIL import Image
 from torch.optim.lr_scheduler import StepLR
@@ -22,64 +22,65 @@ from sklearn.metrics import roc_auc_score, confusion_matrix
 from skimage.io import imread, imsave
 import skimage
 from PIL import ImageFile
-from PIL import Image
+#from PIL import Image
 from sklearn.preprocessing import normalize
 from evaluation import *
+from covidDataSet import *
 
 torch.cuda.empty_cache()
 
 
-batchsize=4
-def read_txt(txt_path):
-    with open(txt_path) as f:
-        lines = f.readlines()
-    txt_data = [line.strip() for line in lines]
-    return txt_data
+# batchsize=4
+# def read_txt(txt_path):
+#     with open(txt_path) as f:
+#         lines = f.readlines()
+#     txt_data = [line.strip() for line in lines]
+#     return txt_data
 
-class CovidCTDataset(Dataset):
-    def __init__(self, root_dir, txt_COVID, txt_NonCOVID, transform=None):
-        """
-        Args:
-            txt_path (string): Path to the txt file with annotations.
-            root_dir (string): Directory with all the images.
-            transform (callable, optional): Optional transform to be applied
-                on a sample.
-        File structure:
-        - root_dir
-            - CT_COVID
-                - img1.png
-                - img2.png
-                - ......
-            - CT_NonCOVID
-                - img1.png
-                - img2.png
-                - ......
-        """
-        self.root_dir = root_dir
-        self.txt_path = [txt_COVID,txt_NonCOVID]
-        self.classes = ['CT_COVID', 'CT_NonCOVID']
-        self.num_cls = len(self.classes)
-        self.img_list = []
-        for c in range(self.num_cls):
-            cls_list = [[os.path.join(self.root_dir,self.classes[c],item), c] for item in read_txt(self.txt_path[c])]
-            self.img_list += cls_list
-        self.transform = transform
-
-    def __len__(self):
-        return len(self.img_list)
-
-    def __getitem__(self, idx):
-        if torch.is_tensor(idx):
-            idx = idx.tolist()
-
-        img_path = self.img_list[idx][0]
-        image = Image.open(img_path).convert('RGB')
-
-        if self.transform:
-            image = self.transform(image)
-        sample = {'img': image,
-                  'label': int(self.img_list[idx][1])}
-        return sample
+# class CovidCTDataset(Dataset):
+#     def __init__(self, root_dir, txt_COVID, txt_NonCOVID, transform=None):
+#         """
+#         Args:
+#             txt_path (string): Path to the txt file with annotations.
+#             root_dir (string): Directory with all the images.
+#             transform (callable, optional): Optional transform to be applied
+#                 on a sample.
+#         File structure:
+#         - root_dir
+#             - CT_COVID
+#                 - img1.png
+#                 - img2.png
+#                 - ......
+#             - CT_NonCOVID
+#                 - img1.png
+#                 - img2.png
+#                 - ......
+#         """
+#         self.root_dir = root_dir
+#         self.txt_path = [txt_COVID,txt_NonCOVID]
+#         self.classes = ['CT_COVID', 'CT_NonCOVID']
+#         self.num_cls = len(self.classes)
+#         self.img_list = []
+#         for c in range(self.num_cls):
+#             cls_list = [[os.path.join(self.root_dir,self.classes[c],item), c] for item in read_txt(self.txt_path[c])]
+#             self.img_list += cls_list
+#         self.transform = transform
+#
+#     def __len__(self):
+#         return len(self.img_list)
+#
+#     def __getitem__(self, idx):
+#         if torch.is_tensor(idx):
+#             idx = idx.tolist()
+#
+#         img_path = self.img_list[idx][0]
+#         image = Image.open(img_path).convert('RGB')
+#
+#         if self.transform:
+#             image = self.transform(image)
+#         sample = {'img': image,
+#                   'label': int(self.img_list[idx][1])}
+#         return sample
 
 #training process is defined here
 
@@ -272,17 +273,17 @@ if __name__ == '__main__':
         normalize
     ])
 
-    trainset = CovidCTDataset(root_dir='data',
-                              txt_COVID='data/covidSplit/trainCT_COVID.txt',
-                              txt_NonCOVID='data/nonCovidSplit/trainCT_NonCOVID.txt',
+    trainset = CovidCTDataset(root_dir='../Images',
+                              txt_COVID='../Data-split/COVID/trainCT_COVID.txt',
+                              txt_NonCOVID='../Data-split/NonCOVID/trainCT_NonCOVID.txt',
                               transform= train_transformer)
-    valset = CovidCTDataset(root_dir='data',
-                              txt_COVID='data/covidSplit/valCT_COVID.txt',
-                              txt_NonCOVID='data/nonCovidSplit/valCT_NonCOVID.txt',
+    valset = CovidCTDataset(root_dir='../Images',
+                              txt_COVID='../Data-split/COVID/valCT_COVID.txt',
+                              txt_NonCOVID='../Data-split/NonCOVID/valCT_NonCOVID.txt',
                               transform= val_transformer)
-    testset = CovidCTDataset(root_dir='data',
-                              txt_COVID='data/covidSplit/testCT_COVID.txt',
-                              txt_NonCOVID='data/nonCovidSplit/testCT_NonCOVID.txt',
+    testset = CovidCTDataset(root_dir='../Images',
+                              txt_COVID='../Data-split/COVID/testCT_COVID.txt',
+                              txt_NonCOVID='../Data-split/NonCOVID/testCT_NonCOVID.txt',
                               transform= val_transformer)
     print(trainset.__len__())
     print(valset.__len__())
@@ -386,12 +387,12 @@ if __name__ == '__main__':
         vote_score = vote_score + scorelist
 
 
-        eval = Evaluation(vote_pred, votenum, vote_score, targetlist, predlist, 'train')
-        eval.plotEval()
-        eval.plotConfusion()
-
 
         if epoch % votenum == 0:
+
+            eval = Evaluation(vote_pred, votenum, vote_score, targetlist, predlist, 'train')
+            eval.plotEval()
+            eval.plotConfusion()
 
             # major vote
             vote_pred[vote_pred <= (votenum/2)] = 0
