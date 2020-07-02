@@ -26,7 +26,7 @@ from PIL import ImageFile
 from sklearn.preprocessing import normalize
 from evaluation import *
 from covidDataSet import *
-from trainTest import*
+from trainValTest import*
 
 torch.cuda.empty_cache()
 
