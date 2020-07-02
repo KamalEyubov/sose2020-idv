@@ -1,12 +1,12 @@
 #import torch
 import torchvision
-import torchvision.transforms as transforms
+#import torchvision.transforms as transforms
 import torchvision.datasets as datasets
 #import torch.nn.functional as F
 #import torch.nn as nn
 import torch.optim as optim
 #import os
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 from torch.optim.lr_scheduler import StepLR
 #import numpy as np
 from datetime import datetime
@@ -15,7 +15,7 @@ import random
 from torchvision.datasets import ImageFolder
 import re
 from torch.utils.data import  DataLoader
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 from PIL import Image
 from torch.optim.lr_scheduler import StepLR
 from sklearn.metrics import roc_auc_score, confusion_matrix
@@ -23,10 +23,11 @@ from skimage.io import imread, imsave
 import skimage
 from PIL import ImageFile
 #from PIL import Image
-from sklearn.preprocessing import normalize
+#from sklearn.preprocessing import normalize
 from evaluation import *
-from covidDataSet import *
+#from covidDataSet import *
 from trainValTest import*
+from dataloadersGeneration import *
 
 torch.cuda.empty_cache()
 
@@ -41,54 +42,18 @@ if __name__ == '__main__':
     batchsize = 16
     # normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
 
-    ########## Mean and std are calculated from the train dataset
-    normalize = transforms.Normalize(mean=[0.45271412, 0.45271412, 0.45271412],
-                                         std=[0.33165374, 0.33165374, 0.33165374])
-    train_transformer = transforms.Compose([
-        transforms.Resize(256),
-        transforms.RandomResizedCrop((224),scale=(0.5,1.0)),
-        transforms.RandomHorizontalFlip(),
-    #     transforms.RandomRotation(90),
-        # random brightness and random contrast
-        transforms.ColorJitter(brightness=0.2, contrast=0.2),
-        transforms.ToTensor(),
-        normalize
-    ])
-
-    val_transformer = transforms.Compose([
-    #     transforms.Resize(224),
-    #     transforms.CenterCrop(224),
-        transforms.Resize((224,224)),
-        transforms.ToTensor(),
-        normalize
-    ])
-
-    trainset = CovidCTDataset(root_dir='../Images',
-                              txt_COVID='../Data-split/COVID/trainCT_COVID.txt',
-                              txt_NonCOVID='../Data-split/NonCOVID/trainCT_NonCOVID.txt',
-                              transform= train_transformer)
-    valset = CovidCTDataset(root_dir='../Images',
-                              txt_COVID='../Data-split/COVID/valCT_COVID.txt',
-                              txt_NonCOVID='../Data-split/NonCOVID/valCT_NonCOVID.txt',
-                              transform= val_transformer)
-    testset = CovidCTDataset(root_dir='../Images',
-                              txt_COVID='../Data-split/COVID/testCT_COVID.txt',
-                              txt_NonCOVID='../Data-split/NonCOVID/testCT_NonCOVID.txt',
-                              transform= val_transformer)
-    print('Trainset', trainset.__len__())
-    print('Valset', valset.__len__())
-    print('Testset', testset.__len__())
-
-    train_loader = DataLoader(trainset, batch_size=batchsize, drop_last=False, shuffle=True)
-    val_loader = DataLoader(valset, batch_size=batchsize, drop_last=False, shuffle=False)
-    test_loader = DataLoader(testset, batch_size=batchsize, drop_last=False, shuffle=False)
-
 
     # for batch_index, batch_samples in enumerate(train_loader):
     #         data, target = batch_samples['img'], batch_samples['label']
     # skimage.io.imshow(data[0,1,:,:].numpy())
     # plt.savefig('img.png')
     # train
+
+    trainset, valset, testset = getDatasets()
+    train_loader = DataLoader(trainset, batch_size=batchsize, drop_last=False, shuffle=True)
+    val_loader = DataLoader(valset, batch_size=batchsize, drop_last=False, shuffle=False)
+    test_loader = DataLoader(testset, batch_size=batchsize, drop_last=False, shuffle=False)
+
 
     '''ResNet50 pretrained'''
 
