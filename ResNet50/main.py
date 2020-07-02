@@ -38,6 +38,7 @@ alpha_name = f'{alpha}'
 #device = 'cuda'
 
 if __name__ == '__main__':
+    batchsize = 16
     # normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
 
     ########## Mean and std are calculated from the train dataset
@@ -74,9 +75,9 @@ if __name__ == '__main__':
                               txt_COVID='../Data-split/COVID/testCT_COVID.txt',
                               txt_NonCOVID='../Data-split/NonCOVID/testCT_NonCOVID.txt',
                               transform= val_transformer)
-    print(trainset.__len__())
-    print(valset.__len__())
-    print(testset.__len__())
+    print('Trainset', trainset.__len__())
+    print('Valset', valset.__len__())
+    print('Testset', testset.__len__())
 
     train_loader = DataLoader(trainset, batch_size=batchsize, drop_last=False, shuffle=True)
     val_loader = DataLoader(valset, batch_size=batchsize, drop_last=False, shuffle=False)
@@ -140,7 +141,6 @@ if __name__ == '__main__':
 
 
 
-    bs =batchsize
     votenum = 10
     import warnings
     warnings.filterwarnings('ignore')
@@ -166,7 +166,7 @@ if __name__ == '__main__':
 
     total_epoch = 1
     for epoch in range(1, total_epoch+1):
-        train(optimizer, epoch, model, train_loader, bs)
+        train(optimizer, epoch, model, train_loader, batchsize)
 
         targetlist, scorelist, predlist = val(epoch, model, val_loader)
         print('target',targetlist)
@@ -183,35 +183,6 @@ if __name__ == '__main__':
             print('F1', eval.getF1())
             print('AUC', eval.getAUC())
             print('Accuracy', eval.getAccuracy())
-
-            # major vote
-            # vote_pred[vote_pred <= (votenum/2)] = 0
-            # vote_pred[vote_pred > (votenum/2)] = 1
-            # vote_score = vote_score/votenum
-            #
-            # print('vote_pred', vote_pred)
-            # print('targetlist', targetlist)
-            # TP = ((vote_pred == 1) & (targetlist == 1)).sum()
-            # TN = ((vote_pred == 0) & (targetlist == 0)).sum()
-            # FN = ((vote_pred == 0) & (targetlist == 1)).sum()
-            # FP = ((vote_pred == 1) & (targetlist == 0)).sum()
-            #
-            #
-            # print('TP=',TP,'TN=',TN,'FN=',FN,'FP=',FP)
-            # print('TP+FP',TP+FP)
-            # p = TP / (TP + FP)
-            # print('precision',p)
-            # p = TP / (TP + FP)
-            # r = TP / (TP + FN)
-            # print('recall',r)
-            # F1 = 2 * r * p / (r + p)
-            # acc = (TP + TN) / (TP + TN + FP + FN)
-            # print('F1',F1)
-            # print('acc',acc)
-            # AUC = roc_auc_score(targetlist, vote_score)
-            # print('AUCp', roc_auc_score(targetlist, vote_pred))
-            # print('AUC', AUC)
-
 
 
     #         if epoch == total_epoch:
@@ -230,7 +201,7 @@ if __name__ == '__main__':
     #         f.close()
 
     # test
-    bs = 10
+    #bs = 16
     import warnings
     warnings.filterwarnings('ignore')
 
@@ -255,32 +226,6 @@ if __name__ == '__main__':
     print('Accuracy', eval.getAccuracy())
     eval.plotEval()
     eval.plotConfusion()
-    # print('target',targetlist)
-    # print('score',scorelist)
-    # print('predict',predlist)
-    # vote_pred = vote_pred + predlist
-    # vote_score = vote_score + scorelist
-    #
-    # TP = ((predlist == 1) & (targetlist == 1)).sum()
-    #
-    # TN = ((predlist == 0) & (targetlist == 0)).sum()
-    # FN = ((predlist == 0) & (targetlist == 1)).sum()
-    # FP = ((predlist == 1) & (targetlist == 0)).sum()
-    #
-    # print('TP=',TP,'TN=',TN,'FN=',FN,'FP=',FP)
-    # print('TP+FP',TP+FP)
-    # p = TP / (TP + FP)
-    # print('precision',p)
-    # p = TP / (TP + FP)
-    # r = TP / (TP + FN)
-    # print('recall',r)
-    # F1 = 2 * r * p / (r + p)
-    # acc = (TP + TN) / (TP + TN + FP + FN)
-    # print('F1',F1)
-    # print('acc',acc)
-    # AUC = roc_auc_score(targetlist, vote_score)
-    # print('AUC', AUC)
-
     # f = open(f'model_result/medical_transfer/test_{modelname}_{alpha_name}_LUNA_moco_CT_moco.txt', 'a+')
     # f.write('\n The epoch is {}, average recall: {:.4f}, average precision: {:.4f},\
     # average F1: {:.4f}, average accuracy: {:.4f}, average AUC: {:.4f}'.format(

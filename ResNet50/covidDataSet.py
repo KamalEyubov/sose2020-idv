@@ -3,7 +3,7 @@ import os
 import torch
 from PIL import Image
 
-batchsize=4
+
 def read_txt(txt_path):
     with open(txt_path) as f:
         lines = f.readlines()
