@@ -43,17 +43,16 @@ if __name__ == '__main__':
     # normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
 
 
+    trainset, valset, testset = getTransformedDataSplit()
+    train_loader = DataLoader(trainset, batch_size=batchsize, drop_last=False, shuffle=True)
+    val_loader = DataLoader(valset, batch_size=batchsize, drop_last=False, shuffle=False)
+    test_loader = DataLoader(testset, batch_size=batchsize, drop_last=False, shuffle=False)
+
     # for batch_index, batch_samples in enumerate(train_loader):
     #         data, target = batch_samples['img'], batch_samples['label']
     # skimage.io.imshow(data[0,1,:,:].numpy())
     # plt.savefig('img.png')
     # train
-
-    trainset, valset, testset = getDatasets()
-    train_loader = DataLoader(trainset, batch_size=batchsize, drop_last=False, shuffle=True)
-    val_loader = DataLoader(valset, batch_size=batchsize, drop_last=False, shuffle=False)
-    test_loader = DataLoader(testset, batch_size=batchsize, drop_last=False, shuffle=False)
-
 
     '''ResNet50 pretrained'''
 
