@@ -1,0 +1,2 @@
+
+ The epoch is 1, average recall: 0.0000, average precision: nan,    average F1: nan, average accuracy: 0.4828, average AUC: 0.5000

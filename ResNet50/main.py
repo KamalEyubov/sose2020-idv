@@ -105,7 +105,7 @@ if __name__ == '__main__':
 
 
 
-    votenum = 10
+    votenum = 1
     import warnings
     warnings.filterwarnings('ignore')
 
@@ -113,10 +113,8 @@ if __name__ == '__main__':
     p_list = []
     acc_list = []
     AUC_list = []
-    # TP = 0
-    # TN = 0
-    # FN = 0
-    # FP = 0
+    F1_list = []
+
     vote_pred = np.zeros(valset.__len__())
     vote_score = np.zeros(valset.__len__())
 
@@ -144,40 +142,38 @@ if __name__ == '__main__':
         if epoch % votenum == 0:
 
             eval = Evaluation(vote_pred, votenum, vote_score, targetlist, predlist, 'train')
-            print('F1', eval.getF1())
-            print('AUC', eval.getAUC())
-            print('Accuracy', eval.getAccuracy())
+            r_list.append(eval.recall)
+            p_list.append(eval.precision)
+            acc_list.append(eval.getAccuracy())
+            AUC_list.append(eval.getAUC())
+            F1_list.append(eval.getF1())
 
+            if epoch == total_epoch:
+                torch.save(model.state_dict(), "model_backup/medical_transfer/{}_{}_covid_moco_covid.pt".format(modelname,alpha_name))
 
-    #         if epoch == total_epoch:
-    #         torch.save(model.state_dict(), "model_backup/medical_transfer/{}_{}_covid_moco_covid.pt".format(modelname,alpha_name))
-    #
-    #         vote_pred = np.zeros(valset.__len__())
-    #         vote_score = np.zeros(valset.__len__())
-    #         print('\n The epoch is {}, average recall: {:.4f}, average precision: {:.4f},\
-    # average F1: {:.4f}, average accuracy: {:.4f}, average AUC: {:.4f}'.format(
-    #         epoch, r, p, F1, acc, AUC))
-    #
-    #         f = open('model_result/medical_transfer/{}_{}.txt'.format(modelname,alpha_name), 'a+')
-    #         f.write('\n The epoch is {}, average recall: {:.4f}, average precision: {:.4f},\
-    # average F1: {:.4f}, average accuracy: {:.4f}, average AUC: {:.4f}'.format(
-    #         epoch, r, p, F1, acc, AUC))
-    #         f.close()
+                vote_pred = np.zeros(valset.__len__())
+                vote_score = np.zeros(valset.__len__())
+                print('\n The epoch is {}, average recall: {:.4f}, average precision: {:.4f},\
+        average F1: {:.4f}, average accuracy: {:.4f}, average AUC: {:.4f}'.format(
+                epoch, sum(r_list)/len(r_list), sum(p_list)/len(p_list), sum(F1_list)/len(F1_list), sum(acc_list)/len(acc_list), sum(AUC_list)/len(AUC_list)))
+
+                f = open('model_result/medical_transfer/{}_{}.txt'.format(modelname,alpha_name), 'a+')
+                f.write('\n The epoch is {}, average recall: {:.4f}, average precision: {:.4f},\
+        average F1: {:.4f}, average accuracy: {:.4f}, average AUC: {:.4f}'.format(
+                epoch, sum(r_list)/len(r_list), sum(p_list)/len(p_list), sum(F1_list)/len(F1_list), sum(acc_list)/len(acc_list), sum(AUC_list)/len(AUC_list)))
+                f.close()
 
     # test
-    #bs = 16
     import warnings
     warnings.filterwarnings('ignore')
 
     epoch = 1
-    # r_list = []
-    # p_list = []
-    # acc_list = []
-    # AUC_list = []
-    # TP = 0
-    # TN = 0
-    # FN = 0
-    # FP = 0
+    r_list = []
+    p_list = []
+    acc_list = []
+    AUC_list = []
+    F1_list = []
+
     vote_pred = np.zeros(testset.__len__())
     vote_score = np.zeros(testset.__len__())
 
@@ -185,14 +181,17 @@ if __name__ == '__main__':
     targetlist, scorelist, predlist = test(epoch, model, test_loader)
 
     eval = Evaluation(vote_pred, votenum, vote_score, targetlist, predlist, 'test')
-    print('F1', eval.getF1())
-    print('AUC', eval.getAUC())
-    print('Accuracy', eval.getAccuracy())
+    r_list.append(eval.recall)
+    p_list.append(eval.precision)
+    acc_list.append(eval.getAccuracy())
+    AUC_list.append(eval.getAUC())
+    F1_list.append(eval.getF1())
+
     eval.plotEval()
     eval.plotConfusion()
-    # f = open(f'model_result/medical_transfer/test_{modelname}_{alpha_name}_LUNA_moco_CT_moco.txt', 'a+')
-    # f.write('\n The epoch is {}, average recall: {:.4f}, average precision: {:.4f},\
-    # average F1: {:.4f}, average accuracy: {:.4f}, average AUC: {:.4f}'.format(
-    # epoch, r, p, F1, acc, AUC))
-    # f.close()
-    # torch.save(model.state_dict(), "model_backup/medical_transfer/{}_{}_covid_moco_covid.pt".format(modelname,alpha_name))
+    f = open(f'model_result/medical_transfer/test_{modelname}_{alpha_name}_LUNA_moco_CT_moco.txt', 'a+')
+    f.write('\n The epoch is {}, average recall: {:.4f}, average precision: {:.4f},\
+    average F1: {:.4f}, average accuracy: {:.4f}, average AUC: {:.4f}'.format(
+    epoch, sum(r_list)/len(r_list), sum(p_list)/len(p_list), sum(F1_list)/len(F1_list), sum(acc_list)/len(acc_list), sum(AUC_list)/len(AUC_list)))
+    f.close()
+    torch.save(model.state_dict(), "model_backup/medical_transfer/{}_{}_covid_moco_covid.pt".format(modelname,alpha_name))
