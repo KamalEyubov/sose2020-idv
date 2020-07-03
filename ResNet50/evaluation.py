@@ -19,11 +19,11 @@ class Evaluation:
         self.FN = 0
         self.FP = 0
 
-        self.precision = 0
-        self.recall = 0
-        # self.F1 = []
-        # self.AUC = []
-        # self.accuracy = []
+        self.precisionHistory = []
+        self.recallHistory = []
+        self.f1History = []
+        self.aucHistory = []
+        self.accHistory = []
 
         self.mode = mode
 
@@ -42,18 +42,28 @@ class Evaluation:
         self.FN = ((self.vote_pred == 0) & (self.targetlist == 1)).sum()
         self.FP = ((self.vote_pred == 1) & (self.targetlist == 0)).sum()
 
-        self.precision = self.TP / (self.TP + self.FP)
-        self.recall = self.TP / (self.TP + self.FN)
+        self.precisionHistory.append( self.TP / (self.TP + self.FP))
+        self.recallHistory.append(self.TP / (self.TP + self.FN))
+        self.accHistory.append(roc_auc_score(self.targetlist, self.vote_score))
+        self.aucHistory.append((self.TP + self.TN) / (self.TP + self.TN + self.FP + self.FN))
+        r = self.getRecall()
+        p = self.getPrecision()
+        self.f1History.append(2 * r * p / (r + p))
 
+
+    def getRecall(self):
+        return np.mean(self.recallHistory)
+
+    def getPrecision(self):
+        return np.mean(self.precisionHistory)
 
     def getF1(self):
-        return 2 * self.recall * self.precision / (self.recall + self.precision)
+        return np.mean(self.f1History)
 
     def getAccuracy(self):
-        return (self.TP + self.TN) / (self.TP + self.TN + self.FP + self.FN)
-
+        return np.mean(self.accHistory)
     def getAUC(self):
-        return roc_auc_score(self.targetlist, self.vote_score)
+        return np.mean(self.aucHistory)
 
     def getConfusion(self):
         confusion = confusion_matrix(self.targetlist, self.predlist)

@@ -4,3 +4,7 @@ data
 *.png
 #ignore pycache
 __pycache__/
+#ignore model backup 
+model_backup/
+#ignore model result
+model_result/
