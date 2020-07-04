@@ -11,7 +11,7 @@ def getTransforms():
         transforms.Resize((224,224)),
         #transforms.RandomResizedCrop((224),scale=(0.5,1.0)),
         #transforms.RandomHorizontalFlip(),
-    #     transforms.RandomRotation(90),
+        #transforms.RandomRotation((90,90)),
         # random brightness and random contrast
         #transforms.ColorJitter(brightness=0.2, contrast=0.2),
         transforms.ToTensor(),

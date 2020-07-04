@@ -48,56 +48,29 @@ if __name__ == '__main__':
     val_loader = DataLoader(valset, batch_size=batchsize, drop_last=False, shuffle=False)
     test_loader = DataLoader(testset, batch_size=batchsize, drop_last=False, shuffle=False)
 
-    # for batch_index, batch_samples in enumerate(train_loader):
-    #         data, target = batch_samples['img'], batch_samples['label']
+    for batch_index, batch_samples in enumerate(train_loader):
+            data, target = batch_samples['img'], batch_samples['label']
     # skimage.io.imshow(data[0,1,:,:].numpy())
     # plt.savefig('img.png')
-    # train
 
+    # x = torch.arange(8).view(2, 2, 2)
+    # plt.imshow((x[0,:,:].numpy()))
+    # plt.savefig('x.png')
+    # y = torch.rot90(x, 1, [1, 2])
+    # plt.imshow((y[0,:,:].numpy()))
+    # plt.savefig('y.png')
+    #train
+    #print(data.shape)
+    # print(type(trainset.transform))
+    # print(train_loader.dataset.transform.__dict__['transforms'][1].__dict__['degrees'])
     '''ResNet50 pretrained'''
 
     import torchvision.models as models
     from resNet import *
-    model = resnet50().cuda()
+    model = resnet50()
+    model.change_cls_number(num_classes=4)
+    model.cuda()
 
-    # checkpoint = torch.load('new_data/save_model/checkpoint.pth.tar')
-    # # print(checkpoint.keys())
-    # # print(checkpoint['arch'])
-
-    # state_dict = checkpoint['state_dict']
-    # for key in list(state_dict.keys()):
-    #     if 'module.encoder_q' in key:
-    #         print(key[17:])
-    #         new_key = key[17:]
-    #         state_dict[new_key] = state_dict[key]
-    #     del state_dict[key]
-    # for key in list(state_dict.keys()):
-    #     if  key == 'fc.0.weight':
-    #         new_key = 'fc.weight'
-    #         state_dict[new_key] = state_dict[key]
-    #         del state_dict[key]
-    #     if  key == 'fc.0.bias':
-    #         new_key = 'fc.bias'
-    #         state_dict[new_key] = state_dict[key]
-    #         del state_dict[key]
-    #     if  key == 'fc.2.weight' or key == 'fc.2.bias':
-    #         del state_dict[key]
-    # state_dict['fc.weight'] = state_dict['fc.weight'][:1000,:]
-    # state_dict['fc.bias'] = state_dict['fc.bias'][:1000]
-    # # print(state_dict.keys())
-
-    # # print(state_dict)
-    # # pattern = re.compile(
-    # #         r'^(.*denselayer\d+\.(?:norm|relu|conv))\.((?:[12])\.(?:weight|bias|running_mean|running_var))$')
-    # #     for key in list(state_dict.keys()):
-    # #         match = pattern.match(key)
-    # #         new_key = match.group(1) + match.group(2) if match else key
-    # #         new_key = new_key[7:] if remove_data_parallel else new_key
-    # #         new_key = new_key[7:]
-    # #         state_dict[new_key] = state_dict[key]
-    # #         del state_dict[key]
-
-    # # model.load_state_dict(checkpoint['state_dict'])
 
     modelname = 'ResNet50'
     # modelname = 'ResNet50_ssl'
@@ -116,7 +89,7 @@ if __name__ == '__main__':
     optimizer = optim.Adam(model.parameters(), lr=0.0001)
     scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=10)
 
-    # scheduler = optim.lr_scheduler.ExponentialLR(optimizer, gamma = 0.95)
+    scheduler = optim.lr_scheduler.ExponentialLR(optimizer, gamma = 0.95)
 
     scheduler = StepLR(optimizer, step_size=1)
     eval = Evaluation(vote_pred, votenum, vote_score, 'train')
@@ -129,54 +102,45 @@ if __name__ == '__main__':
         print('target',targetlist)
         print('score',scorelist)
         print('predict',predlist)
-        # vote_pred = vote_pred + predlist
-        # vote_score = vote_score + scorelist
-
-
+        eval.update(predlist, targetlist, scorelist)
+        scheduler.step()
 
         if epoch % votenum == 0:
-            eval.update(predlist, targetlist, scorelist)
+            eval.computeStatistics()
+            torch.save(model.state_dict(), "model_backup/medical_transfer/{}_{}_train_covid_moco_covid.pt".format(modelname,alpha_name))
 
-            if epoch == total_epoch:
-                torch.save(model.state_dict(), "model_backup/medical_transfer/{}_{}_train_covid_moco_covid.pt".format(modelname,alpha_name))
+            vote_pred = np.zeros(valset.__len__())
+            vote_score = np.zeros(valset.__len__())
+            print('\n The epoch is {}, average recall: {:.4f}, average precision: {:.4f},\
+    average F1: {:.4f}, average accuracy: {:.4f}, average AUC: {:.4f}'.format(
+            epoch, eval.getRecall(), eval.getPrecision(), eval.getF1(), eval.getAccuracy(), eval.getAUC()))
 
-                vote_pred = np.zeros(valset.__len__())
-                vote_score = np.zeros(valset.__len__())
-                print('\n The epoch is {}, average recall: {:.4f}, average precision: {:.4f},\
-        average F1: {:.4f}, average accuracy: {:.4f}, average AUC: {:.4f}'.format(
-                epoch, eval.getRecall(), eval.getPrecision(), eval.getF1(), eval.getAccuracy(), eval.getAUC()))
-
-                f = open('model_result/medical_transfer/train_{}_{}.txt'.format(modelname,alpha_name), 'a+')
-                f.write('\n The epoch is {}, average recall: {:.4f}, average precision: {:.4f},\
-        average F1: {:.4f}, average accuracy: {:.4f}, average AUC: {:.4f}'.format(
-                epoch, eval.getRecall(), eval.getPrecision(), eval.getF1(), eval.getAccuracy(), eval.getAUC()))
-                f.close()
+            f = open('model_result/medical_transfer/train_{}_{}.txt'.format(modelname,alpha_name), 'a+')
+            f.write('\n The epoch is {}, average recall: {:.4f}, average precision: {:.4f},\
+    average F1: {:.4f}, average accuracy: {:.4f}, average AUC: {:.4f}'.format(
+            epoch, eval.getRecall(), eval.getPrecision(), eval.getF1(), eval.getAccuracy(), eval.getAUC()))
+            f.close()
 
     # test
     import warnings
     warnings.filterwarnings('ignore')
 
-    epoch = 1
+    #epoch = 1
 
     vote_pred = np.zeros(testset.__len__())
     vote_score = np.zeros(testset.__len__())
 
     eval = Evaluation(vote_pred, votenum, vote_score, 'test')
 
-    for epoch in range(1, total_epoch+1):
-        targetlist, scorelist, predlist = test(epoch, model, test_loader)
-        vote_pred = vote_pred + predlist
-        vote_score = vote_score + scorelist
+    targetlist, scorelist, predlist = test(total_epoch, model, test_loader)
+    eval.update(predlist, targetlist, scorelist)
+    eval.computeStatistics()
 
-
-
-        eval.update(predlist, targetlist, scorelist)
-
-        f = open(f'model_result/medical_transfer/test_{modelname}_{alpha_name}_LUNA_moco_CT_moco.txt', 'a+')
-        f.write('\n The epoch is {}, average recall: {:.4f}, average precision: {:.4f},\
-        average F1: {:.4f}, average accuracy: {:.4f}, average AUC: {:.4f}'.format(
-        epoch, eval.getRecall(), eval.getPrecision(), eval.getF1(), eval.getAccuracy(), eval.getAUC()))
-        f.close()
+    f = open(f'model_result/medical_transfer/test_{modelname}_{alpha_name}_LUNA_moco_CT_moco.txt', 'a+')
+    f.write('\n The epoch is {}, average recall: {:.4f}, average precision: {:.4f},\
+    average F1: {:.4f}, average accuracy: {:.4f}, average AUC: {:.4f}'.format(
+    epoch, eval.getRecall(), eval.getPrecision(), eval.getF1(), eval.getAccuracy(), eval.getAUC()))
+    f.close()
 
     eval.plotEval()
     eval.plotConfusion()

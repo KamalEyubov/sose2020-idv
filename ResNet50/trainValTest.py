@@ -2,10 +2,31 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import numpy as np
+import skimage
+import matplotlib.pyplot as plt
+import torchvision.transforms as transforms
+import random
+
 
 device = 'cuda'
 
-def train(optimizer, epoch, model, train_loader, bs):
+
+def rotateBatch(batch):
+    size = batch.shape[0]
+    rotationMult = [i for i in range(4) for j in range(size)]
+    random.shuffle(rotationMult)
+
+    for idx, mult in zip(range(size), rotationMult):
+        batch[idx,:,:,:] = torch.rot90(batch[idx,:,:,:], mult, [1,2])
+    return batch, torch.IntTensor(rotationMult[:size])
+
+def mixup_criterion(criterion, pred, y_a, y_b, lam):
+#     print(pred)
+#     print(y_a)
+#     print('criterion',criterion(pred, y_a))
+    return lam * criterion(pred, y_a) + (1 - lam) * criterion(pred, y_b)
+
+def train(optimizer, epoch, model, train_loader, bs, rotate=True):
 
     model.train()
 
@@ -13,33 +34,39 @@ def train(optimizer, epoch, model, train_loader, bs):
     train_correct = 0
 
     for batch_index, batch_samples in enumerate(train_loader):
+        if rotate == True:
+            im, labels =  rotateBatch(batch_samples['img'])
+        # for i in range(16):
+        #     fig, ax = plt.subplots()
+        #     plt.imshow(im[i,1,:,:].numpy())
+        #     plt.savefig('blub'+str(i)+'.png')
 
         # move data to device
-        data, target = batch_samples['img'].to(device), batch_samples['label'].to(device)
+        data, target = im.to(device), labels.to(device)
+        #data, target = batch_samples['img'].to(device), batch_samples['label'].to(device)
 
-        ## adjust data to meet the input dimension of model
-#         data = data[:, 0, :, :]
-#         data = data[:, None, :, :]
 
-        #mixup
-#         data, targets_a, targets_b, lam = mixup_data(data, target, alpha, use_cuda=True)
 
 
         optimizer.zero_grad()
         output = model(data)
+        # print(output)
+        #break
         criteria = nn.CrossEntropyLoss()
         loss = criteria(output, target.long())
 
         #mixup loss
 #         loss = mixup_criterion(criteria, output, targets_a, targets_b, lam)
 
-        train_loss += criteria(output, target.long())
+        # train_loss += criteria(output, target.long())
 
-        optimizer.zero_grad()
+        #optimizer.zero_grad()
         loss.backward()
         optimizer.step()
 
         pred = output.argmax(dim=1, keepdim=True)
+        # print(pred)
+        # break
         train_correct += pred.eq(target.long().view_as(pred)).sum().item()
 
         # Display progress and write to tensorboard
@@ -82,15 +109,19 @@ def val(epoch, model, val_loader):
         targetlist=[]
         # Predict
         for batch_index, batch_samples in enumerate(val_loader):
-            data, target = batch_samples['img'].to(device), batch_samples['label'].to(device)
+            im, labels =  rotateBatch(batch_samples['img'])
+
+            data, target = im.to(device), labels.to(device)
+            #data, target = batch_samples['img'].to(device), batch_samples['label'].to(device)
 
 #             data = data[:, 0, :, :]
 #             data = data[:, None, :, :]
             output = model(data)
-
+            #print(output.cpu().shape)
             test_loss += criteria(output, target.long())
             score = F.softmax(output, dim=1)
             pred = output.argmax(dim=1, keepdim=True)
+
 #             print('target',target.long()[:, 2].view_as(pred))
             correct += pred.eq(target.long().view_as(pred)).sum().item()
 
@@ -131,7 +162,10 @@ def test(epoch, model, test_loader):
         targetlist=[]
         # Predict
         for batch_index, batch_samples in enumerate(test_loader):
-            data, target = batch_samples['img'].to(device), batch_samples['label'].to(device)
+            im, labels =  rotateBatch(batch_samples['img'])
+
+            data, target = im.to(device), labels.to(device)
+            #data, target = batch_samples['img'].to(device), batch_samples['label'].to(device)
 #             data = data[:, 0, :, :]
 #             data = data[:, None, :, :]
 #             print(target)
