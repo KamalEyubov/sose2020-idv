@@ -20,13 +20,8 @@ def rotateBatch(batch):
         batch[idx,:,:,:] = torch.rot90(batch[idx,:,:,:], mult, [1,2])
     return batch, torch.IntTensor(rotationMult[:size])
 
-def mixup_criterion(criterion, pred, y_a, y_b, lam):
-#     print(pred)
-#     print(y_a)
-#     print('criterion',criterion(pred, y_a))
-    return lam * criterion(pred, y_a) + (1 - lam) * criterion(pred, y_b)
 
-def train(optimizer, epoch, model, train_loader, bs, rotate=True):
+def train(optimizer, epoch, model, train_loader, bs, rotate=False):
 
     model.train()
 
@@ -36,6 +31,8 @@ def train(optimizer, epoch, model, train_loader, bs, rotate=True):
     for batch_index, batch_samples in enumerate(train_loader):
         if rotate == True:
             im, labels =  rotateBatch(batch_samples['img'])
+        else:
+            im, labels = batch_samples['img'], batch_samples['label']
         # for i in range(16):
         #     fig, ax = plt.subplots()
         #     plt.imshow(im[i,1,:,:].numpy())
@@ -58,7 +55,7 @@ def train(optimizer, epoch, model, train_loader, bs, rotate=True):
         #mixup loss
 #         loss = mixup_criterion(criteria, output, targets_a, targets_b, lam)
 
-        # train_loss += criteria(output, target.long())
+        train_loss += loss
 
         #optimizer.zero_grad()
         loss.backward()
@@ -75,6 +72,8 @@ def train(optimizer, epoch, model, train_loader, bs, rotate=True):
                 epoch, batch_index, len(train_loader),
                 100.0 * batch_index / len(train_loader), loss.item()/ bs))
 
+    averageLoss = train_loss/len(train_loader.dataset)
+    return averageLoss
 #     print('\nTrain set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
 #         train_loss/len(train_loader.dataset), train_correct, len(train_loader.dataset),
 #         100.0 * train_correct / len(train_loader.dataset)))
@@ -85,7 +84,7 @@ def train(optimizer, epoch, model, train_loader, bs, rotate=True):
 #     f.write('\n')
 #     f.close()
 
-def val(epoch, model, val_loader):
+def val(epoch, model, val_loader, rotate=False):
 
     model.eval()
     test_loss = 0
@@ -109,7 +108,10 @@ def val(epoch, model, val_loader):
         targetlist=[]
         # Predict
         for batch_index, batch_samples in enumerate(val_loader):
-            im, labels =  rotateBatch(batch_samples['img'])
+            if rotate == True:
+                im, labels =  rotateBatch(batch_samples['img'])
+            else:
+                im, labels = batch_samples['img'], batch_samples['label']
 
             data, target = im.to(device), labels.to(device)
             #data, target = batch_samples['img'].to(device), batch_samples['label'].to(device)
@@ -138,7 +140,7 @@ def val(epoch, model, val_loader):
     # Write to tensorboard
 #     writer.add_scalar('Test Accuracy', 100.0 * correct / len(test_loader.dataset), epoch)
 
-def test(epoch, model, test_loader):
+def test(epoch, model, test_loader, rotate=False):
 
     model.eval()
     test_loss = 0
@@ -162,7 +164,10 @@ def test(epoch, model, test_loader):
         targetlist=[]
         # Predict
         for batch_index, batch_samples in enumerate(test_loader):
-            im, labels =  rotateBatch(batch_samples['img'])
+            if rotate == True:
+                im, labels =  rotateBatch(batch_samples['img'])
+            else:
+                im, labels = batch_samples['img'], batch_samples['label']
 
             data, target = im.to(device), labels.to(device)
             #data, target = batch_samples['img'].to(device), batch_samples['label'].to(device)
