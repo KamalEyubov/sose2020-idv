@@ -60,7 +60,7 @@ if __name__ == '__main__':
 
     import torchvision.models as models
     from resNet import *
-    path = 'model_backup/medical_transfer/ResNet50_SSLRotateNoPretrain_test_covid_moco_covid.pt'
+    path = 'model_backup/medical_transfer/ResNet50_SSLRotateWithPretrain_test_covid_moco_covid.pt'
     model = resnet50()
     model.change_cls_number(num_classes=4)
     model.load_state_dict(torch.load(path))
@@ -69,7 +69,7 @@ if __name__ == '__main__':
 
 
     modelname = 'ResNet50'
-    alpha = 'SSLRotateNoPretrainFinetune'
+    alpha = 'SSLRotateWithPretrainFinetune'
     # modelname = 'ResNet50_ssl'
 
 

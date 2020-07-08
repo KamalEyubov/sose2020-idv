@@ -119,6 +119,7 @@ if __name__ == '__main__':
     import warnings
     warnings.filterwarnings('ignore')
 
+    votenum = 1
     vote_pred = np.zeros(testset.__len__())
     vote_score = np.zeros(testset.__len__())
 

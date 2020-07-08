@@ -8,5 +8,5 @@ __pycache__/
 model_backup/
 #ignore model result
 model_result/
-#ignore DenseNet
-../DenseNet169/
+#ignore train
+train/
