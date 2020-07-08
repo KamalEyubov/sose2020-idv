@@ -38,22 +38,21 @@ class Evaluation:
         self.vote_pred[self.vote_pred > (self.votenum/2)] = 1
         self.vote_score = self.vote_score/self.votenum
 
-        #self.targetlist = targetlist
-        #self.predlist = predlist
-
         self.TP = ((self.vote_pred == 1) & (self.targetlist == 1)).sum()
         self.TN = ((self.vote_pred == 0) & (self.targetlist == 0)).sum()
         self.FN = ((self.vote_pred == 0) & (self.targetlist == 1)).sum()
         self.FP = ((self.vote_pred == 1) & (self.targetlist == 0)).sum()
 
-        self.precisionHistory.append( self.TP / (self.TP + self.FP))
+        self.precisionHistory.append(self.TP / (self.TP + self.FP))
         self.recallHistory.append(self.TP / (self.TP + self.FN))
         self.accHistory.append((self.TP + self.TN) / (self.TP + self.TN + self.FP + self.FN))
-        #print(self.targetlist, self.vote_score)
-        #self.aucHistory.append(roc_auc_score(self.targetlist, self.vote_score, multi_class='ovr'))
+        self.aucHistory.append(roc_auc_score(self.targetlist, self.vote_score))
         r = self.getRecall()
         p = self.getPrecision()
         self.f1History.append(2 * r * p / (r + p))
+
+        self.vote_pred = np.zeros(self.vote_pred.__len__())
+        self.vote_score = np.zeros(self.vote_score.__len__())
 
 
     def getRecall(self):
@@ -67,10 +66,9 @@ class Evaluation:
 
     def getAccuracy(self):
         return np.mean(self.accHistory)
-        
+
     def getAUC(self):
         return np.mean(self.aucHistory)
-        return 0
 
     def getConfusion(self):
         confusion = confusion_matrix(self.targetlist, self.predlist)
