@@ -20,13 +20,13 @@ torch.cuda.empty_cache()
 device = 'cpu'
 batchsize = 4
 train_epochs_start = 0
-train_epochs_end = 100
+train_epochs_end = 50
 
 
 class RotNet(torch.nn.Module):
 
     def __init__(self, out_dim=4):
-        super(SimCLR, self).__init__()
+        super(RotNet, self).__init__()
 
 	# Randomly initialize weights
         densenet = torchvision.models.densenet169(pretrained=True)
@@ -64,11 +64,11 @@ if train_epochs_start > 0:
 
 
 normalize = transforms.Normalize(
-    mean=[0.45271412, 0.45271412, 0.45271412],
-    std=[0.33165374, 0.33165374, 0.33165374]
+    mean=[0.3226, 0.3226, 0.3226],
+    std=[0.3404, 0.3404, 0.3404]
 )
 transformer = transforms.Compose([
-    transforms.resize((224, 224)),
+    transforms.Resize((224, 224)),
     transforms.ToTensor(),
     normalize
 ])
@@ -81,7 +81,7 @@ def rotate(tensor, angle):
         return tensor.flip((-1, -2))
     elif angle == 270:
         return tensor.flip((-2)).transpose(-1, -2)
-    else
+    else:
         return None
 
 
@@ -192,7 +192,7 @@ print('training')
 bs = 10
 votenum = 5
 
-criteria = NTXentLoss()
+criteria = nn.CrossEntropyLoss()
 optimizer = optim.Adam(model.parameters(), lr=3e-4, weight_decay=1e-5)
 scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=len(data_loader))
 

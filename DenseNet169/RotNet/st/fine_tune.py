@@ -21,13 +21,13 @@ device = 'cpu'
 batchsize = 16
 train_epochs_start = 0
 train_epochs_end = 50
-ssl_epochs = 100
+ssl_epochs = 50
 
 
 class RotNet(torch.nn.Module):
 
     def __init__(self, out_dim=4):
-        super(SimCLR, self).__init__()
+        super(RotNet, self).__init__()
 
         densenet = torchvision.models.densenet169(pretrained=True)
         num_features = densenet.classifier.in_features

@@ -21,7 +21,7 @@ device = 'cpu'
 batchsize = 16
 train_epochs_start = 0
 train_epochs_end = 50
-ssl_epochs = 100
+ssl_epochs = 50
 
 
 class RotNet(torch.nn.Module):

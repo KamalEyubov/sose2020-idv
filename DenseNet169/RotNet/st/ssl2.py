@@ -20,8 +20,8 @@ torch.cuda.empty_cache()
 device = 'cpu'
 batchsize = 4
 train_epochs_start = 0
-train_epochs_end = 100
-ssl1_epochs = 100
+train_epochs_end = 50
+ssl1_epochs = 50
 
 
 class RotNet(torch.nn.Module):
@@ -89,7 +89,7 @@ def rotate(tensor, angle):
         return tensor.flip((-1, -2))
     elif angle == 270:
         return tensor.flip((-2)).transpose(-1, -2)
-    else
+    else:
         return None
 
 

@@ -109,8 +109,8 @@ class NTXentLoss(torch.nn.Module):
 
 
 normalize = transforms.Normalize(
-    mean=[0.45271412, 0.45271412, 0.45271412],
-    std=[0.33165374, 0.33165374, 0.33165374]
+    mean=[0.3226, 0.3226, 0.3226],
+    std=[0.3404, 0.3404, 0.3404]
 )
 color_jitter = transforms.ColorJitter(0.8, 0.8, 0.8, 0.2)
 transformer = transforms.Compose([
