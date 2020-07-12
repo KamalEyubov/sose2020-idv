@@ -45,17 +45,17 @@ def getTransformsLuna():
 
 def getTransformedDataSplit():
     train_transformer, val_transformer = getTransforms()
-    trainset = CovidCTDataset(root_dir='../Images',
-                              txt_COVID='../Data-split/COVID/trainCT_COVID.txt',
-                              txt_NonCOVID='../Data-split/NonCOVID/trainCT_NonCOVID.txt',
+    trainset = CovidCTDataset(root_dir='../../Images',
+                              txt_COVID='../../Data-split/COVID/trainCT_COVID.txt',
+                              txt_NonCOVID='../../Data-split/NonCOVID/trainCT_NonCOVID.txt',
                               transform= train_transformer)
-    valset = CovidCTDataset(root_dir='../Images',
-                              txt_COVID='../Data-split/COVID/valCT_COVID.txt',
-                              txt_NonCOVID='../Data-split/NonCOVID/valCT_NonCOVID.txt',
+    valset = CovidCTDataset(root_dir='../../Images',
+                              txt_COVID='../../Data-split/COVID/valCT_COVID.txt',
+                              txt_NonCOVID='../../Data-split/NonCOVID/valCT_NonCOVID.txt',
                               transform= val_transformer)
-    testset = CovidCTDataset(root_dir='../Images',
-                              txt_COVID='../Data-split/COVID/testCT_COVID.txt',
-                              txt_NonCOVID='../Data-split/NonCOVID/testCT_NonCOVID.txt',
+    testset = CovidCTDataset(root_dir='../../Images',
+                              txt_COVID='../../Data-split/COVID/testCT_COVID.txt',
+                              txt_NonCOVID='../../Data-split/NonCOVID/testCT_NonCOVID.txt',
                               transform= val_transformer)
     print('Trainset', trainset.__len__())
     print('Valset', valset.__len__())
@@ -65,6 +65,6 @@ def getTransformedDataSplit():
 
 def getTransformedLUNA():
     train_transformer = getTransformsLuna()
-    trainset = LungDataset(path='train', transform=train_transformer)
+    trainset = LungDataset(path='../train', transform=train_transformer)
     print('Trainset', trainset.__len__())
     return trainset

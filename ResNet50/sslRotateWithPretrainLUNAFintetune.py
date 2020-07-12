@@ -29,7 +29,6 @@ from evaluation import *
 from trainValTest import*
 from dataloadersGeneration import *
 
-
 torch.cuda.empty_cache()
 
 if __name__ == '__main__':
@@ -61,12 +60,16 @@ if __name__ == '__main__':
 
     import torchvision.models as models
     from resNet import *
+    path = 'model_backup/medical_transfer/ResNet50_SSLRotateWithPretrainLUNA_train_covid_moco_covid.pt'
     model = resnet50()
+    model.change_cls_number(num_classes=4)
+    model.load_state_dict(torch.load(path))
+    model.change_cls_number(num_classes=2)
     model.cuda()
 
 
     modelname = 'ResNet50'
-    alpha = 'noSslNoPretrain'
+    alpha = 'SSLRotateWithPretrainLUNAFinetune'
     # modelname = 'ResNet50_ssl'
 
 
@@ -82,25 +85,23 @@ if __name__ == '__main__':
     #optimizer = optim.SGD(model.parameters(), lr=0.001, momentum = 0.9)
     optimizer = optim.Adam(model.parameters(), lr=0.0001)
     scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=10)
-    #scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer)
 
     #scheduler = optim.lr_scheduler.ExponentialLR(optimizer, gamma = 0.95)
 
-    #scheduler = StepLR(optimizer, step_size=1)
+    scheduler = StepLR(optimizer, step_size=1)
     eval = Evaluation(vote_pred, votenum, vote_score, alpha)
     # acc = 0
     # cnt = 0
     total_epoch = 50
     for epoch in range(1, total_epoch+1):
         averageLoss = train(optimizer, epoch, model, train_loader, batchsize, rotate=False)
+
         targetlist, scorelist, predlist = val(epoch, model, val_loader, rotate=False)
-        scheduler.step()
-        print(optimizer)
         print('target',targetlist)
         print('score',scorelist)
         print('predict',predlist)
         eval.update(predlist, targetlist, scorelist)
-
+        #scheduler.step()
 
         if epoch % votenum == 0:
             eval.computeStatistics()
@@ -131,7 +132,7 @@ if __name__ == '__main__':
     targetlist, scorelist, predlist = test(total_epoch, model, test_loader, rotate=False)
     eval.update(predlist, targetlist, scorelist)
     eval.computeStatistics()
-    acc = np.sum(targetlist == predlist)/targetlist.shape[0]
+    #acc = np.sum(targetlist == predlist)/targetlist.shape[0]
 
     f = open('model_result/medical_transfer/test_{}_{}.txt'.format(modelname,alpha), 'a+')
     f.write('\n The epoch is {}, average recall: {:.4f}, average precision: {:.4f},\
