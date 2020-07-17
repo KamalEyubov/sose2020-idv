@@ -67,12 +67,12 @@ if __name__ == '__main__':
             eval.computeStatistics()
             torch.save(model.state_dict(), "model_backup/medical_transfer/{}_{}_train_covid_moco_covid.pt".format(modelname,alpha))
 
-            print('\n The epoch is {}, average recall: {:.4f}, average precision: {:.4f},\
+            print('\n epoch: {}, average recall: {:.4f}, average precision: {:.4f},\
             average F1: {:.4f}, average accuracy: {:.4f}, average AUC: {:.4f}'.format(
                     epoch, eval.getRecall(), eval.getPrecision(), eval.getF1(), eval.getAccuracy(), eval.getAUC()))
 
             f = open('model_result/medical_transfer/train_{}_{}.txt'.format(modelname,alpha), 'a+')
-            f.write('\n The epoch is {}, average recall: {:.4f}, average precision: {:.4f},\
+            f.write('\n epoch {}, average recall: {:.4f}, average precision: {:.4f},\
             average F1: {:.4f}, average accuracy: {:.4f}, average AUC: {:.4f}'.format(
                     epoch, eval.getRecall(), eval.getPrecision(), eval.getF1(), eval.getAccuracy(), eval.getAUC()))
             f.close()
@@ -90,7 +90,7 @@ if __name__ == '__main__':
     acc = np.sum(targetlist == predlist)/targetlist.shape[0]
 
     f = open('model_result/medical_transfer/test_{}_{}.txt'.format(modelname,alpha), 'a+')
-    f.write('\n The epoch is {}, average recall: {:.4f}, average precision: {:.4f},\
+    f.write('\n epoch {}, average recall: {:.4f}, average precision: {:.4f},\
     average F1: {:.4f}, average accuracy: {:.4f}, average AUC: {:.4f}'.format(
             epoch, eval.getRecall(), eval.getPrecision(), eval.getF1(), eval.getAccuracy(), eval.getAUC()))
     f.close()
