@@ -53,8 +53,7 @@ def getTransformsLuna():
 
 def getTransformsSimClr():
 
-    normalize = transforms.Normalize(mean=[0.45271412, 0.45271412, 0.45271412],
-                                             std=[0.33165374, 0.33165374, 0.33165374])
+    normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
     train_transformer = transforms.Compose([
         transforms.RandomResizedCrop(224, scale=(0.2, 1.)),
         transforms.RandomApply([transforms.ColorJitter(0.4, 0.4, 0.4, 0.1)], p=0.8),

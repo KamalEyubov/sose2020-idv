@@ -34,7 +34,7 @@ if __name__ == '__main__':
     model.change_cls_number(num_classes=4)
     model.cuda()
     modelname = 'ResNet50'
-    alpha = 'SSLRotateWithPretrainLUNA'
+    alpha = 'SslRotateWithPretrainLUNA'
 
     votenum = 10
     optimizer = optim.Adam(model.parameters(), lr=0.0001)
@@ -50,9 +50,9 @@ if __name__ == '__main__':
         if epoch % votenum == 0:
             torch.save(model.state_dict(), "model_backup/medical_transfer/{}_{}_train_covid_moco_covid.pt".format(modelname,alpha))
 
-            print('\n The epoch is {}, average loss: {:.4f}'.format(
+            print('\n epoch {}, average loss: {:.4f}'.format(
             epoch, averageLoss))
 
             f = open('model_result/medical_transfer/train_{}_{}.txt'.format(modelname,alpha), 'a+')
-            f.write('\n The epoch is {}, average loss: {:.4f}'.format(epoch, averageLoss))
+            f.write('\n epoch {}, average loss: {:.4f}'.format(epoch, averageLoss))
             f.close()

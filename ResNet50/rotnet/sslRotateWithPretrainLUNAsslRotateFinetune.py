@@ -32,14 +32,14 @@ if __name__ == '__main__':
     val_loader = DataLoader(valset, batch_size=batchsize, drop_last=False, shuffle=False)
     test_loader = DataLoader(testset, batch_size=batchsize, drop_last=False, shuffle=False)
 
-    path = 'model_backup/medical_transfer/ResNet50_sslRotateWithPretrainLUNAsslRotate_train_covid_moco_covid.pt'
+    path = 'model_backup/medical_transfer/ResNet50_SslRotateWithPretrainLUNAsslRotate_train_covid_moco_covid.pt'
     model = resnet50()
     model.change_cls_number(num_classes=4)
     model.load_state_dict(torch.load(path))
     model.change_cls_number(num_classes=2)
     model.cuda()
     modelname = 'ResNet50'
-    alpha = 'sslRotateWithPretrainLUNAsslRotateFinetune'
+    alpha = 'SslRotateWithPretrainLUNAsslRotateFinetune'
 
     votenum = 10
     vote_pred = np.zeros(valset.__len__())
@@ -65,12 +65,12 @@ if __name__ == '__main__':
             eval.computeStatistics()
             torch.save(model.state_dict(), "model_backup/medical_transfer/{}_{}_train_covid_moco_covid.pt".format(modelname,alpha))
 
-            print('\n The epoch is {}, average recall: {:.4f}, average precision: {:.4f},\
+            print('\n epoch {}, average recall: {:.4f}, average precision: {:.4f},\
             average F1: {:.4f}, average accuracy: {:.4f}, average AUC: {:.4f}'.format(
                     epoch, eval.getRecall(), eval.getPrecision(), eval.getF1(), eval.getAccuracy(), eval.getAUC()))
 
             f = open('model_result/medical_transfer/train_{}_{}.txt'.format(modelname,alpha), 'a+')
-            f.write('\n The epoch is {}, average recall: {:.4f}, average precision: {:.4f},\
+            f.write('\n epoch {}, average recall: {:.4f}, average precision: {:.4f},\
             average F1: {:.4f}, average accuracy: {:.4f}, average AUC: {:.4f}'.format(
                     epoch, eval.getRecall(), eval.getPrecision(), eval.getF1(), eval.getAccuracy(), eval.getAUC()))
             f.close()
@@ -84,9 +84,9 @@ if __name__ == '__main__':
     targetlist, scorelist, predlist = test(total_epoch, model, test_loader, rotate=False)
     eval.update(predlist, targetlist, scorelist)
     eval.computeStatistics()
-    
+
     f = open('model_result/medical_transfer/test_{}_{}.txt'.format(modelname,alpha), 'a+')
-    f.write('\n The epoch is {}, average recall: {:.4f}, average precision: {:.4f},\
+    f.write('\n epoch {}, average recall: {:.4f}, average precision: {:.4f},\
     average F1: {:.4f}, average accuracy: {:.4f}, average AUC: {:.4f}'.format(
             epoch, eval.getRecall(), eval.getPrecision(), eval.getF1(), eval.getAccuracy(), eval.getAUC()))
     f.close()

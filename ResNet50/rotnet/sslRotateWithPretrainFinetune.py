@@ -32,14 +32,14 @@ if __name__ == '__main__':
     val_loader = DataLoader(valset, batch_size=batchsize, drop_last=False, shuffle=False)
     test_loader = DataLoader(testset, batch_size=batchsize, drop_last=False, shuffle=False)
 
-    path = 'model_backup/medical_transfer/ResNet50_SSLRotateWithPretrain_test_covid_moco_covid.pt'
+    path = 'model_backup/medical_transfer/ResNet50_SslRotateWithPretrain_test_covid_moco_covid.pt'
     model = resnet50()
     model.change_cls_number(num_classes=4)
     model.load_state_dict(torch.load(path))
     model.change_cls_number(num_classes=2)
     model.cuda()
     modelname = 'ResNet50'
-    alpha = 'SSLRotateWithPretrainFinetune'
+    alpha = 'SslRotateWithPretrainFinetune'
 
     votenum = 10
     vote_pred = np.zeros(valset.__len__())

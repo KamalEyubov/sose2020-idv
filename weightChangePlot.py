@@ -1,3 +1,10 @@
+import sys
+sys.path.append('ResNet50/rotnet/util')
+from resNet import *
+import torch
+import matplotlib.pyplot as plt
+
+
 def plot_change(model1, model2):
     diff = torch.nn.MSELoss()
     norm_w, norm_wx, norm_b, norm_bx, conv_w, conv_wx = [], [], [], [], [], []
@@ -20,8 +27,18 @@ def plot_change(model1, model2):
     plt.bar(norm_wx, norm_w, label="BN gamma")
     plt.bar(norm_bx, norm_b, label="BN beta")
     plt.legend()
-    plt.show()
+    plt.savefig('ResNet50RotNetSelfTransNorm.png')
 
     plt.bar(conv_wx, conv_w, label="CONV weights")
     plt.legend()
-    plt.show()
+    plt.savefig('ResNet50RotNetSelfTransConv.png')
+
+pathM1 = sys.argv[1]
+pathM2 = sys.argv[2]
+m1 = resnet50()
+m2 = resnet50()
+m1.change_cls_number(num_classes=2)
+m2.change_cls_number(num_classes=4)
+m1.load_state_dict(torch.load(pathM1))
+m2.load_state_dict(torch.load(pathM2))
+plot_change(m1, m2)

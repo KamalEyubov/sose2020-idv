@@ -32,13 +32,13 @@ if __name__ == '__main__':
     val_loader = DataLoader(valset, batch_size=batchsize, drop_last=False, shuffle=False)
     test_loader = DataLoader(testset, batch_size=batchsize, drop_last=False, shuffle=False)
 
-    path = 'model_backup/medical_transfer/ResNet50_SSLRotateWithPretrainLUNA_train_covid_moco_covid.pt'
+    path = 'model_backup/medical_transfer/ResNet50_SslRotateWithPretrainLUNA_train_covid_moco_covid.pt'
     model = resnet50()
     model.change_cls_number(num_classes=4)
     model.load_state_dict(torch.load(path))
     model.cuda()
     modelname = 'ResNet50'
-    alpha = 'sslRotateWithPretrainLUNAsslRotate'
+    alpha = 'SslRotateWithPretrainLUNAsslRotate'
 
     votenum = 10
     vote_pred = np.zeros(valset.__len__())
@@ -66,11 +66,11 @@ if __name__ == '__main__':
 
             vote_pred = np.zeros(valset.__len__())
             vote_score = np.zeros(valset.__len__())
-            print('\n The epoch is {}, average accuracy: {:.4f}, average loss: {:.4f}'.format(
+            print('\n epoch {}, average accuracy: {:.4f}, average loss: {:.4f}'.format(
             epoch, acc/cnt,  averageLoss))
 
             f = open('model_result/medical_transfer/train_{}_{}.txt'.format(modelname,alpha), 'a+')
-            f.write('\n The epoch is {}, average accuracy: {:.4f}, average loss: {:.4f}'.format(epoch, acc/cnt, averageLoss))
+            f.write('\n epoch {}, average accuracy: {:.4f}, average loss: {:.4f}'.format(epoch, acc/cnt, averageLoss))
             f.close()
 
     vote_pred = np.zeros(testset.__len__())
@@ -81,7 +81,7 @@ if __name__ == '__main__':
     acc = np.sum(targetlist == predlist)/targetlist.shape[0]
 
     f = open('model_result/medical_transfer/test_{}_{}.txt'.format(modelname,alpha), 'a+')
-    f.write('\n The epoch is {}, average accuracy: {:.4f}'.format(epoch, acc))
+    f.write('\n epoch {}, average accuracy: {:.4f}'.format(epoch, acc))
     f.close()
 
     torch.save(model.state_dict(), "model_backup/medical_transfer/{}_{}_test_covid_moco_covid.pt".format(modelname,alpha))

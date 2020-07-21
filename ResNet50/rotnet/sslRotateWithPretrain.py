@@ -36,7 +36,7 @@ if __name__ == '__main__':
     model.change_cls_number(num_classes=4)
     model.cuda()
     modelname = 'ResNet50'
-    alpha = 'SSLRotateWithPretrain'
+    alpha = 'SslRotateWithPretrain'
 
     votenum = 10
     vote_pred = np.zeros(valset.__len__())

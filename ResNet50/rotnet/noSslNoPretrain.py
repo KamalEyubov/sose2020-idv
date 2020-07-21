@@ -43,6 +43,8 @@ if __name__ == '__main__':
     modelname = 'ResNet50'
     alpha = 'noSslNoPretrain'
 
+    torch.save(model.state_dict(), "model_backup/medical_transfer/{}_{}_blank_covid.pt".format(modelname,alpha))
+
     votenum = 10
     vote_pred = np.zeros(valset.__len__())
     vote_score = np.zeros(valset.__len__())
