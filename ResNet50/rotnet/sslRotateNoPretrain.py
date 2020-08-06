@@ -27,6 +27,13 @@ torch.cuda.empty_cache()
 if __name__ == '__main__':
     batchsize = 16
 
+    # reproducibility
+    torch.manual_seed(42)
+    torch.cuda.manual_seed(42)
+    np.random.seed(42)
+    torch.backends.cudnn.deterministic = True
+    rng = np.random.RandomState(42)
+
     trainset, valset, testset = getTransformedDataSplit()
     train_loader = DataLoader(trainset, batch_size=batchsize, drop_last=False, shuffle=True)
     val_loader = DataLoader(valset, batch_size=batchsize, drop_last=False, shuffle=False)
@@ -36,14 +43,18 @@ if __name__ == '__main__':
     model.change_cls_number(num_classes=4)
     model.cuda()
     modelname = 'ResNet50'
-    alpha = 'SslRotateNoPretrain'
+    alpha = 'sslRotateNoPretrain'
 
-    votenum = 10
+    votenum = 5
     vote_pred = np.zeros(valset.__len__())
     vote_score = np.zeros(valset.__len__())
 
-    optimizer = optim.Adam(model.parameters(), lr=0.0001)
-    scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=10)
+    optimizer = optim.Adam(model.parameters())
+
+    #print header of statistics file
+    f = open('model_result/train_{}_{}.txt'.format(modelname,alpha), 'a+')
+    f.write('epoch, average accuracy, loss\n')
+    f.close()
 
     acc = 0
     cnt = 0
@@ -51,7 +62,6 @@ if __name__ == '__main__':
     for epoch in range(1, total_epoch+1):
         averageLoss = train(optimizer, epoch, model, train_loader, batchsize, rotate=True)
         targetlist, scorelist, predlist = val(epoch, model, val_loader, rotate=True)
-        scheduler.step()
         print('target',targetlist)
         print('score',scorelist)
         print('predict',predlist)
@@ -59,23 +69,23 @@ if __name__ == '__main__':
         if epoch % votenum == 0:
             acc += np.sum(targetlist == predlist)/targetlist.shape[0]
             cnt += 1
-            torch.save(model.state_dict(), "model_backup/medical_transfer/{}_{}_train_covid_moco_covid.pt".format(modelname,alpha))
 
             vote_pred = np.zeros(valset.__len__())
             vote_score = np.zeros(valset.__len__())
             print('\n The epoch is {}, average accuracy: {:.4f}, average loss: {:.4f}'.format(
             epoch, acc/cnt,  averageLoss))
 
-            f = open('model_result/medical_transfer/train_{}_{}.txt'.format(modelname,alpha), 'a+')
-            f.write('\n The epoch is {}, average accuracy: {:.4f}, average loss: {:.4f}'.format(epoch, acc/cnt, averageLoss))
+            f = open('model_result/train_{}_{}.txt'.format(modelname,alpha), 'a+')
+            f.write('{}, {:.4f}, {:.4f}\n'.format(epoch, acc/cnt, averageLoss))
             f.close()
+    torch.save(model.state_dict(), "model_backup/{}_{}_train_covid.pt".format(modelname,alpha))
 
     vote_pred = np.zeros(testset.__len__())
     vote_score = np.zeros(testset.__len__())
     targetlist, scorelist, predlist = test(total_epoch, model, test_loader, rotate=True)
     acc = np.sum(targetlist == predlist)/targetlist.shape[0]
 
-    f = open('model_result/medical_transfer/test_{}_{}.txt'.format(modelname,alpha), 'a+')
+    f = open('model_result/test_{}_{}.txt'.format(modelname,alpha), 'a+')
     f.write('\n The epoch is {}, average accuracy: {:.4f}'.format(epoch, acc))
     f.close()
-    torch.save(model.state_dict(), "model_backup/medical_transfer/{}_{}_test_covid_moco_covid.pt".format(modelname,alpha))
+    torch.save(model.state_dict(), "model_backup/{}_{}_test_covid.pt".format(modelname,alpha))

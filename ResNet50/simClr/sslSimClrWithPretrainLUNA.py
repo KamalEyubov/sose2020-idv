@@ -27,6 +27,12 @@ torch.cuda.empty_cache()
 if __name__ == '__main__':
     batchsize = 16
 
+    torch.manual_seed(42)
+    torch.cuda.manual_seed(42)
+    np.random.seed(42)
+    torch.backends.cudnn.deterministic = True
+    rng = np.random.RandomState(42)
+
     trainset = getTransformedLUNA()
     train_loader = DataLoader(trainset, batch_size=batchsize, drop_last=False, shuffle=True)
 
@@ -34,24 +40,27 @@ if __name__ == '__main__':
     model.change_cls_number(num_classes=2048)
     model.cuda()
     modelname = 'ResNet50'
-    alpha = 'SslSimClrWithPretrainLuna'
+    alpha = 'sslSimClrWithPretrainLuna'
 
-    votenum = 10
+    votenum = 5
 
-    optimizer = optim.Adam(model.parameters(), lr=0.0001)
-    scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=10)
+    optimizer = optim.Adam(model.parameters())
+
+    #print header of statistics file
+    f = open('model_result/train_{}_{}.txt'.format(modelname,alpha), 'a+')
+    f.write('epoch, loss\n')
+    f.close()
 
     total_epoch = 50
     for epoch in range(1, total_epoch+1):
         averageLoss = trainSimClr(optimizer, epoch, model, train_loader, batchsize)
-        scheduler.step()
 
         if epoch % votenum == 0:
-            torch.save(model.state_dict(), "model_backup/medical_transfer/{}_{}_train_covid_moco_covid.pt".format(modelname,alpha))
 
             print('\n The epoch is {}, average loss: {:.4f}'.format(
             epoch,  averageLoss))
 
-            f = open('model_result/medical_transfer/train_{}_{}.txt'.format(modelname,alpha), 'a+')
-            f.write('\n The epoch is {}, average loss: {:.4f}'.format(epoch, averageLoss))
+            f = open('model_result/train_{}_{}.txt'.format(modelname,alpha), 'a+')
+            f.write('{}, {:.4f}\n'.format(epoch, averageLoss))
             f.close()
+    torch.save(model.state_dict(), "model_backup/{}_{}_train_covid.pt".format(modelname,alpha))

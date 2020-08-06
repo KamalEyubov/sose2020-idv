@@ -30,35 +30,41 @@ torch.cuda.empty_cache()
 if __name__ == '__main__':
     batchsize = 16
 
+    # reproducibility
+    torch.manual_seed(42)
+    torch.cuda.manual_seed(42)
+    np.random.seed(42)
+    torch.backends.cudnn.deterministic = True
+    rng = np.random.RandomState(42)
+
     trainset, valset, testset = getTransformedDataSplit()
     train_loader = DataLoader(trainset, batch_size=batchsize, drop_last=False, shuffle=True)
     val_loader = DataLoader(valset, batch_size=batchsize, drop_last=False, shuffle=False)
     test_loader = DataLoader(testset, batch_size=batchsize, drop_last=False, shuffle=False)
 
-    for batch_index, batch_samples in enumerate(train_loader):
-            data, target = batch_samples['img'], batch_samples['label']
-
     model = resnet50()
     model.cuda()
     modelname = 'ResNet50'
     alpha = 'noSslNoPretrain'
+    torch.save(model.state_dict(), "model_backup/{}_{}_blank_covid.pt".format(modelname,alpha))
 
-    torch.save(model.state_dict(), "model_backup/medical_transfer/{}_{}_blank_covid.pt".format(modelname,alpha))
-
-    votenum = 10
+    votenum = 5
     vote_pred = np.zeros(valset.__len__())
     vote_score = np.zeros(valset.__len__())
 
-    optimizer = optim.Adam(model.parameters(), lr=0.0001)
-    scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=10)
+    optimizer = optim.Adam(model.parameters())
+
+    #print header of statistics file
+    f = open('model_result/train_{}_{}.txt'.format(modelname,alpha), 'a+')
+    f.write('epoch, average recall, average precision, average F1, average accuracy, average AUC, loss\n')
+    f.close()
 
     eval = Evaluation(vote_pred, votenum, vote_score, alpha)
     total_epoch = 50
     for epoch in range(1, total_epoch+1):
         averageLoss = train(optimizer, epoch, model, train_loader, batchsize, rotate=False)
         targetlist, scorelist, predlist = val(epoch, model, val_loader, rotate=False)
-        scheduler.step()
-        print(optimizer)
+
         print('target',targetlist)
         print('score',scorelist)
         print('predict',predlist)
@@ -67,17 +73,16 @@ if __name__ == '__main__':
 
         if epoch % votenum == 0:
             eval.computeStatistics()
-            torch.save(model.state_dict(), "model_backup/medical_transfer/{}_{}_train_covid_moco_covid.pt".format(modelname,alpha))
 
             print('\n epoch: {}, average recall: {:.4f}, average precision: {:.4f},\
             average F1: {:.4f}, average accuracy: {:.4f}, average AUC: {:.4f}'.format(
                     epoch, eval.getRecall(), eval.getPrecision(), eval.getF1(), eval.getAccuracy(), eval.getAUC()))
 
-            f = open('model_result/medical_transfer/train_{}_{}.txt'.format(modelname,alpha), 'a+')
-            f.write('\n epoch {}, average recall: {:.4f}, average precision: {:.4f},\
-            average F1: {:.4f}, average accuracy: {:.4f}, average AUC: {:.4f}'.format(
-                    epoch, eval.getRecall(), eval.getPrecision(), eval.getF1(), eval.getAccuracy(), eval.getAUC()))
+            f = open('model_result/train_{}_{}.txt'.format(modelname,alpha), 'a+')
+            f.write('{}, {:.4f}, {:.4f}, {:.4f}, {:.4f}, {:.4f}, {:.4f}\n'.format(
+                    epoch, eval.getRecall(), eval.getPrecision(), eval.getF1(), eval.getAccuracy(), eval.getAUC(), averageLoss))
             f.close()
+    torch.save(model.state_dict(), "model_backup/{}_{}_train_covid.pt".format(modelname,alpha))
 
 
     votenum = 1
@@ -91,7 +96,7 @@ if __name__ == '__main__':
     eval.computeStatistics()
     acc = np.sum(targetlist == predlist)/targetlist.shape[0]
 
-    f = open('model_result/medical_transfer/test_{}_{}.txt'.format(modelname,alpha), 'a+')
+    f = open('model_result/test_{}_{}.txt'.format(modelname,alpha), 'a+')
     f.write('\n epoch {}, average recall: {:.4f}, average precision: {:.4f},\
     average F1: {:.4f}, average accuracy: {:.4f}, average AUC: {:.4f}'.format(
             epoch, eval.getRecall(), eval.getPrecision(), eval.getF1(), eval.getAccuracy(), eval.getAUC()))
@@ -99,4 +104,4 @@ if __name__ == '__main__':
 
     eval.plotEval()
     eval.plotConfusion()
-    torch.save(model.state_dict(), "model_backup/medical_transfer/{}_{}_test_covid_moco_covid.pt".format(modelname,alpha))
+    torch.save(model.state_dict(), "model_backup/{}_{}_test_covid.pt".format(modelname,alpha))
