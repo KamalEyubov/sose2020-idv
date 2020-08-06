@@ -8,20 +8,12 @@ def getTransforms():
                                          std=[0.33165374, 0.33165374, 0.33165374])
 
     train_transformer = transforms.Compose([
-        #transforms.Resize(256),
         transforms.Resize((224,224)),
-        #transforms.RandomResizedCrop((224),scale=(0.5,1.0)),
-        #transforms.RandomHorizontalFlip(),
-        #transforms.RandomRotation((90,90)),
-        # random brightness and random contrast
-        #transforms.ColorJitter(brightness=0.2, contrast=0.2),
         transforms.ToTensor(),
         normalize
     ])
 
     val_transformer = transforms.Compose([
-    #     transforms.Resize(224),
-    #     transforms.CenterCrop(224),
         transforms.Resize((224,224)),
         transforms.ToTensor(),
         normalize
