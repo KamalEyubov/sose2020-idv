@@ -13,6 +13,8 @@ from util.trainValTest import *
 
 device = 'cuda'
 
+#labels are reversed: COVID_positive is actually COVID_negative
+#some goes for COVID_negative which is actually COVID_positive
 def label_covid(label):
 	if label:
 		return 'COVID_positive'
