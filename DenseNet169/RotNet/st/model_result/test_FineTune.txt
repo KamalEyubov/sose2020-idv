@@ -1,1 +1,0 @@
-Testing, average recall: 0.8381, average precision: 0.6331, average F1: 0.7213, average accuracy: 0.6650, average AUC: 0.7477
