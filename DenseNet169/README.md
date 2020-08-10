@@ -31,3 +31,4 @@ Those files are the original scripts which were run on Google Colaboratory.
 Along with them, the Python (py) files were exported.
 
 All scripts are adapted from the file COVID-CT/baseline methods/DenseNet169/DenseNet_predict.py of the repository at https://github.com/UCSD-AI4H/COVID-CT.
+As such, all CT-scans of COVID-19 negative ("healthy") patients are designated as having the label of "1" and are considered "positive", and vice-versa.
