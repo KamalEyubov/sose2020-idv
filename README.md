@@ -101,16 +101,20 @@ Summer Semester 2020 Deep Vision Project
 │      
 ├── Images
 │   ├── CT_COVID
+|   |       Contains positive COVID-CT scans from the COVID-CT dataset
 │   │  
 │   └── CT_NonCOVID
+|           Contains negative COVID-CT scans from the COVID-CT dataset
 │      
 ├── LUNA
+|       Contains the LUNA dataset
 │  
 ├── README.md
 ├── ResNet50
 │  
 │   ├── rotnet
-│   │   |    Contains all methods for RotNet including training with no SSL and random weights and training with  no SSL and pre-trained weights
+│   │   |    Contains all methods for RotNet including training with no SSL and random weights 
+|   |   |    and training with  no SSL and pre-trained weights
 |   |   |    Contains pipe.py for running the training for all methods
 |   |   |    Contains grad_cam.py for RotNet
 │   │   └── util
