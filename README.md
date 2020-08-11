@@ -1,6 +1,7 @@
 # sose2020-idv
 Summer Semester 2020 Deep Vision Project 
 
+```
 .
 ├── Data-split
 │   ├── COVID
@@ -121,7 +122,7 @@ Summer Semester 2020 Deep Vision Project
 ├── ResNet50RotNetSelfTransNorm.png
 └── weightChangePlot.py
 
-54 directories, 1928 files
+```
 
 
 ## DenseNet169
