@@ -110,13 +110,19 @@ Summer Semester 2020 Deep Vision Project
 ├── ResNet50
 │  
 │   ├── rotnet
-│   │   |
+│   │   |    Contains all methods for RotNet including training with no SSL and random weights and training with  no SSL and pre-trained weights
+|   |   |    Contains pipe.py for running the training for all methods
+|   |   |    Contains grad_cam.py for RotNet
 │   │   └── util
+|   |           Contains auxillary files i.e. defining the training function
 │   │    
 │   ├── simClr
+|   |   |    Contains all methods for SimCLR
+|   |   |    Contains pipe.py for running the training for all methods
+|   |   |    Contains grad_cam.py for SimCLR
 │   │   |
 │   │   └── util
-│   │      
+│   │           Contains auxillary files i.e. defining the training function
 │  
 ├── ResNet50RotNetSelfTransConv.png
 ├── ResNet50RotNetSelfTransNorm.png
