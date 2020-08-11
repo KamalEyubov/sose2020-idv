@@ -138,7 +138,7 @@ Summer Semester 2020 Deep Vision Project
 ## DenseNet169
 ## ResNet50
 After installing the dependencies change in the directory of **RotNet** or **SimCLR** depending on which SSL approach you want to run (i.e. cd sose2020-idv/ResNet50/rotnet).<br>
-After changing into the directory of rotnet or simClr run the pipe.py file (i.e. python pipe.py) with python3.<br> This starts the pipeline of running all the methods one afte another.<br> For RotNet this would be: 
+After changing into the directory of rotnet or simClr run the pipe.py file (i.e. python pipe.py) with python3.<br> This starts the pipeline of running all the methods one after another.<br> For RotNet this would be: 
 - no SSL and no pre-training (noSslNoPretrain.py)
 - no SSL with pretraining (noSslWithPretrain.py)
 - RotNet Method 1 (sslRotateNoPretrain.py + sslRotateNoPretrainFinetune.py)
