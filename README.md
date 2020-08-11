@@ -138,5 +138,16 @@ Summer Semester 2020 Deep Vision Project
 ## DenseNet169
 ## ResNet50
 After installing the dependencies change in the directory of **RotNet** or **SimCLR** depending on which SSL approach you want to run (i.e. cd sose2020-idv/ResNet50/rotnet).<br>
-After changing into the directory of rotnet or simClr run the pipe.py file (i.e. python pipe.py) with python3.<br> This starts the pipeline of running all the methods one afte another.<br> For RotNet this would be:<br> - no SSL and no pre-training (noSslNoPretrain.py),<br> - no SSL with pretraining (noSslWithPretrain.py),<br> - RotNet Method 1 (sslRotateNoPretrain.py + sslRotateNoPretrainFinetune.py),<br> - RotNet Method 2 (sslRotateWithPretrain.py + sslRotateWithPretrainFinetune.py),<br> RotNet Method 3 (sslRotateWithPretrainLUNA.py + sslRotateWithPretrainLUNAFinetune.py),<br> - RotNet Self-Trans (sslRotateWithPretrainLUNAsslRotate.py + sslRotateWithPretrainLUNAsslRotateFinetune.py).<br><br>
-For SimCLR this would be:<br> - SimCLR Method 1 (sslSimClrNoPretrain.py + sslSimClrNoPretrainFinetune.py),<br> - SimCLR Method 2 (sslSimClrWithPretrain.py + sslSimClrWithPretrainFinetune.py),<br> - SimCLR Method 3 (sslSimClrWithPretrainLUNA.py + sslSimClrWithPretrainLUNAFinetune.py),<br> - SimCLR Self-Trans (sslSimClrWithPretrainLUNAsslSimClr.py + sslSimClrWithPretrainLUNAsslSimClrFinetune.py).<br> Depending on your hardware this process could take quite a while (i.e. running pipe.py of RotNet took **little more than hour** for me with **NVIDIA GTX 1060 6GB**).
+After changing into the directory of rotnet or simClr run the pipe.py file (i.e. python pipe.py) with python3.<br> This starts the pipeline of running all the methods one afte another.<br> For RotNet this would be: 
+- no SSL and no pre-training (noSslNoPretrain.py)
+- no SSL with pretraining (noSslWithPretrain.py)
+- RotNet Method 1 (sslRotateNoPretrain.py + sslRotateNoPretrainFinetune.py)
+- RotNet Method 2 (sslRotateWithPretrain.py + sslRotateWithPretrainFinetune.py)
+- RotNet Method 3 (sslRotateWithPretrainLUNA.py + sslRotateWithPretrainLUNAFinetune.py)
+- RotNet Self-Trans (sslRotateWithPretrainLUNAsslRotate.py + sslRotateWithPretrainLUNAsslRotateFinetune.py).<br><br>
+
+For SimCLR this would be:
+- SimCLR Method 1 (sslSimClrNoPretrain.py + sslSimClrNoPretrainFinetune.py)
+- SimCLR Method 2 (sslSimClrWithPretrain.py + sslSimClrWithPretrainFinetune.py)
+- SimCLR Method 3 (sslSimClrWithPretrainLUNA.py + sslSimClrWithPretrainLUNAFinetune.py)
+- SimCLR Self-Trans (sslSimClrWithPretrainLUNAsslSimClr.py + sslSimClrWithPretrainLUNAsslSimClrFinetune.py).<br> Depending on your hardware this process could take quite a while (i.e. running pipe.py of RotNet took **little more than hour** for me with **NVIDIA GTX 1060 6GB**).
