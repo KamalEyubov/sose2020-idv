@@ -28,19 +28,19 @@ def plot_change(model1, model2):
     plt.bar(norm_wx, norm_w, label="BN gamma")
     plt.bar(norm_bx, norm_b, label="BN beta")
     plt.legend()
-    plt.savefig('ResNet50RotNetSelfTransNorm.png')
+    plt.savefig('bn.png')
 
     fig = plt.subplots()
     plt.bar(conv_wx, conv_w, label="CONV weights")
     plt.legend()
-    plt.savefig('ResNet50RotNetSelfTransConv.png')
+    plt.savefig('conv.png')
 
 pathM1 = sys.argv[1]
 pathM2 = sys.argv[2]
 m1 = resnet50()
 m2 = resnet50()
-m1.change_cls_number(num_classes=2)
-m2.change_cls_number(num_classes=2)
+m1.change_cls_number(num_classes=2048)
+m2.change_cls_number(num_classes=2048)
 m1.load_state_dict(torch.load(pathM1))
 m2.load_state_dict(torch.load(pathM2))
 plot_change(m1, m2)
