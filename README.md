@@ -224,15 +224,15 @@ Then just create a new virtualenvironment in your shell with the line:<br>
 ```
 python -m venv <name of virtualenvironment>
 ```
-<br>
+
 Then activate your virtualenvironment:<br>
 ```
 source <name of virtualenvironment>/bin/activate
 ```
-<br>
+
 Finally install the dependencies:<br>
 ```
 (<name of virtualenvironment>)$ pip install -r path/to/denpendencies_resnet.txt
 ```
-<br>
+
 If you do not want to use a virtualenvironment just ignore the first 2 lines.
