@@ -249,6 +249,7 @@ class CovidCTDataset(Dataset):
         image = Image.open(img_path).convert('RGB')
 
 	# For each sample, its two random transformations are put into a sample.
+	# The labels are simply ignored.
         image0 = self.transform(image)
         image1 = self.transform(image)
 
