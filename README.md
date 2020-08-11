@@ -219,13 +219,17 @@ Werkzeug==1.0.1
 wrapt==1.12.1
 ```
 Above all the packages are listed which are installed in my virtualenvironment.<br> 
-If you are also using a virtualenvironment all copy and paste the dependencies in a textfile (i.e. denpendencies_resnet.txt)<br>
+If you are also using a virtualenvironment copy and paste all the dependencies in a textfile (i.e. denpendencies_resnet.txt)<br>
+If you do not have the virtualenvironment package installed already on your machine it can be easily installed with following line:<br>
+```
+python3 -m pip install --user virtualenv
+```
 Then just create a new virtualenvironment in your shell with the line:<br>
 ```
 python -m venv <name of virtualenvironment>
 ```
 
-Then activate your virtualenvironment:<br>
+Activate your virtualenvironment:<br>
 ```
 source <name of virtualenvironment>/bin/activate
 ```
@@ -235,7 +239,7 @@ Finally install the dependencies:<br>
 (<name of virtualenvironment>)$ pip install -r path/to/denpendencies_resnet.txt
 ```
 
-If you do not want to use a virtualenvironment just ignore the first 2 lines.<br>
+If you do not want to use a virtualenvironment just ignore the first 3 lines.<br>
 Instead after creating the dependencies textfile install the dependencies with following line in your shell:<br>
 ```
 pip install -r path/to/denpendencies_resnet.txt
