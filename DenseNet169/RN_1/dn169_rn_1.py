@@ -38,6 +38,8 @@ rng = np.random.RandomState(42)
 torch.cuda.empty_cache()
 
 device = 'cuda'
+# For each image, all their rotations are generated and fed to the model.
+# Thus for each batch of size batchsize, the model is fed 4*batchsize images.
 batchsize = 4
 train_epochs_start = 0
 train_epochs_end = 50
