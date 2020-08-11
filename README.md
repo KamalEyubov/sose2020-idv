@@ -150,5 +150,5 @@ For SimCLR this would be:
 - SimCLR Method 1 (sslSimClrNoPretrain.py + sslSimClrNoPretrainFinetune.py)
 - SimCLR Method 2 (sslSimClrWithPretrain.py + sslSimClrWithPretrainFinetune.py)
 - SimCLR Method 3 (sslSimClrWithPretrainLUNA.py + sslSimClrWithPretrainLUNAFinetune.py)
-- SimCLR Self-Trans (sslSimClrWithPretrainLUNAsslSimClr.py + sslSimClrWithPretrainLUNAsslSimClrFinetune.py).<br> Depending on your hardware this process could take quite a while (i.e. running pipe.py of RotNet took **little more than hour** for me with **NVIDIA GTX 1060 6GB**).<br>
+- SimCLR Self-Trans (sslSimClrWithPretrainLUNAsslSimClr.py + sslSimClrWithPretrainLUNAsslSimClrFinetune.py).<br><br> Depending on your hardware this process could take quite a while (i.e. running pipe.py of RotNet took **little more than hour** for me with **NVIDIA GTX 1060 6GB**).<br>
 It is also possible to run each of the files listed above on its own outside of the pipeline. One thing to keep in mind is that the corresponding ssl stage has to be run before the finetuning stage if there is no ssl model already available which the finetuning stage can load.
