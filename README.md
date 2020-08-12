@@ -3,8 +3,6 @@ Summer Semester 2020 Deep Vision Project
 
 ```
 .
-├── bn.png
-├── conv.png
 ├── Data-split
 │   ├── COVID
 │   │   ├── testCT_COVID.txt
@@ -31,8 +29,7 @@ Summer Semester 2020 Deep Vision Project
 │   └── 1.3.6.1.4.1.14519.5.2.1.6279.6001.975426625618184773401026809852.mhd_99.png
 ├── README.md
 ├── ResNet50
-│   └── ...
-└── weightChangePlot.py
+    └── ...
 ```
 
 
@@ -163,7 +160,6 @@ DenseNet169
 │   ├── DN169_RAND.ipynb
 │   ├── dn169_rand.py
 │   └── fine-tune.pt
-├── README.md
 ├── RN_1
 │   ├── DN169_RN_1.ipynb
 │   ├── dn169_rn_1.py
