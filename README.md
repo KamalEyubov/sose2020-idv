@@ -299,7 +299,7 @@ For **SimCLR** this would be:
 - SimCLR Self-Trans (sslSimClrWithPretrainLUNAsslSimClr.py + sslSimClrWithPretrainLUNAsslSimClrFinetune.py).<br><br> Depending on your hardware this process could take quite a while (i.e. running pipe.py of RotNet took **little more than hour** for me with **NVIDIA GTX 1060 6GB**).<br>
 It is also possible to run each of the files listed above on its own outside of the pipeline. To do this just call the file you want execute with python3 (i.e. python sslSimClrNoPretrain.py). One thing to keep in mind is that the corresponding **ssl stage** has to be run **before** the **finetuning stage** if there is no ssl model already available which the finetuning stage can load. Additionally if the folders model_back which stores the model and model_results which stores training and test statistics have not been created yet, they have to be created manually in the corresponding folder (rotnet or simClr). If you use pipe.py the folders will be automatically created if they do not exist.
 
-#### Dependencies
+## Dependencies DenseNet169/ResNet50
 ```
 absl-py==0.9.0
 astunparse==1.6.3
@@ -364,8 +364,8 @@ websocket-client==0.57.0
 Werkzeug==1.0.1
 wrapt==1.12.1
 ```
-Above all the packages are listed which are installed in my virtualenvironment.<br> 
-If you are also using a virtualenvironment copy and paste all the dependencies in a textfile (i.e. denpendencies_resnet.txt)<br>
+Above all the packages are listed which are installed in the virtualenvironment.<br> 
+If you are also using a virtualenvironment copy and paste all the dependencies in a textfile (i.e. denpendencies.txt)<br>
 If you do not have the virtualenvironment package installed already on your machine it can be easily installed with following line:<br>
 ```
 python3 -m pip install --user virtualenv
@@ -382,7 +382,7 @@ source <name of virtualenvironment>/bin/activate
 
 Finally install the dependencies:<br>
 ```
-(<name of virtualenvironment>)$ pip install -r path/to/denpendencies_resnet.txt
+(<name of virtualenvironment>)$ pip install -r path/to/denpendencies.txt
 ```
 
 If you do not want to use a virtualenvironment just ignore the first 3 lines.<br>
