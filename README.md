@@ -28,7 +28,7 @@ Summer Semester 2020 Deep Vision Project
 │   ├── ...
 │   └── 1.3.6.1.4.1.14519.5.2.1.6279.6001.975426625618184773401026809852.mhd_99.png
 ├── README.md
-├── ResNet50
+└── ResNet50
     └── ...
 ```
 
