@@ -169,11 +169,9 @@ Experiments also contain Jupyter Notebook (`ipynb`) files.
 Those files are the original scripts which were run on Google Colaboratory.
 The Python (`py`) files were exported along with those.
 
-All scripts are adapted from the file COVID-CT/baseline methods/DenseNet169/DenseNet_predict.py of the repository at https://github.com/UCSD-AI4H/COVID-CT.
-As such, all CT-scans of COVID-19 negative ("healthy") patients are designated as having the label of "1" and are considered "positive", and vice-versa.
-
-
 ## ResNet50
+This directory includes all the experiments with the **DenseNet169** model conducted by Gabriel Rashidi.<br><br>
+
 After installing the dependencies change into the directory of **RotNet** or **SimCLR** depending on which SSL approach you want to run (i.e. cd sose2020-idv/ResNet50/rotnet).<br>
 After changing into the directory of rotnet or simClr run the `pipe.py` file (i.e. python pipe.py) with python3.<br> This starts the pipeline of running all the methods one after another.<br> For **RotNet** this would be: 
 - no SSL and no pre-training (noSslNoPretrain.py)
@@ -281,3 +279,9 @@ Instead after creating the dependencies textfile install the dependencies with f
 ```
 pip install -r path/to/denpendencies_resnet.txt
 ```
+<br>
+<br>
+<br>
+<br>
+All scripts are adapted from the file COVID-CT/baseline methods/DenseNet169/DenseNet_predict.py of the repository at https://github.com/UCSD-AI4H/COVID-CT.
+As such, all CT-scans of COVID-19 negative ("healthy") patients are designated as having the label of "1" and are considered "positive", and vice-versa.
