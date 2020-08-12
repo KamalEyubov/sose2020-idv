@@ -848,7 +848,7 @@ plt.savefig('fine-tuning_loss.png')
 plt.show()
 
 plot_change(model.cpu(), model_old)
-mif device == 'cuda':
+if device == 'cuda':
     model = model.cuda()
 
 bs = 10
