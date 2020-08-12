@@ -139,12 +139,12 @@ Summer Semester 2020 Deep Vision Project
 This directory includes all the experiments with the **DenseNet169** model conducted by Kamal Eyubov.
 
 A shortened naming for the experiments was used:
-No SSL Random       = `RAND`
-No SSL Pre-trained  = `PRET`
-Method 1            = `XY_1`
-Method 2            = `XY_2`
-Method 3            = `XY_3`
-Self-Trans          = `XY_ST`
+* No SSL Random       = `RAND`
+* No SSL Pre-trained  = `PRET`
+* Method 1            = `XY_1`
+* Method 2            = `XY_2`
+* Method 3            = `XY_3`
+* Self-Trans          = `XY_ST`
 `XY` can be either `RN` (RotNet) or `SC` (SimCLR).
 
 Each experiment is a single script, stages of which are all run at once. To run them, run the python script inside of those experiment directories.
