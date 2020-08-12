@@ -5,7 +5,7 @@ Summer Semester 2020 Deep Vision Project
 .
 ├── Data-split
 │   ├── COVID
-│   │   Contains Covid-positive data-split
+│   │     Contains Covid-positive data-split
 │   │   
 │   │   
 │   └── NonCOVID
@@ -136,16 +136,15 @@ Summer Semester 2020 Deep Vision Project
 
 
 ## DenseNet169
-The directory `DenseNet169` includes all the experiments with the **DenseNet-169** model conducted by Kamal Eyubov.
+The directory `DenseNet169` includes all the experiments with the **DenseNet-169** model conducted by Kamal Eyubov. The subdirectory `plots` contains all plots from the original Google Colaboratory run of the scripts.
 
 A shortened naming for the experiments was used:
-* No SSL Random       = `RAND`
-* No SSL Pre-trained  = `PRET`
-* Method 1            = `XY_1`
-* Method 2            = `XY_2`
-* Method 3            = `XY_3`
-* Self-Trans          = `XY_ST`
-
+- No SSL Random       = `RAND`
+- No SSL Pre-trained  = `PRET`
+- Method 1            = `XY_1`
+- Method 2            = `XY_2`
+- Method 3            = `XY_3`
+- Self-Trans          = `XY_ST`<br>
 `XY` can be either `RN` (RotNet) or `SC` (SimCLR).
 
 Each experiment is a single script, stages of which are all run at once. To run them, run the python script inside of those experiment directories.
@@ -154,22 +153,20 @@ For example, to run Self-Trans for SimCLR, run the script `sose2020-idv/DenseNet
 For the scripts to be run, there should be no directories in the same folder with them as some directories are being generated during the execution,
 which in turn may lead to file name conflicts.
 The scripts generate the following directories:
-* `model_backup` - contains checkpoints of the model for the fine-tuning stage
-* `ssl_backup` - (only in `XY_1`, `XY_2`, `XY_3`) contains checkpoints of the model for the SSL stage
-* `ssl1_backup` - (only in `XY_ST`) contains checkpoints of the model for the SSL stage on LUNA
-* `ssl2_backup` - (only in `XY_ST`) contains checkpoints of the model for the SSL stage on COVID-CT
+- `model_backup` - contains checkpoints of the model for the fine-tuning stage
+- `ssl_backup` - (only in `XY_1`, `XY_2`, `XY_3`) contains checkpoints of the model for the SSL stage
+- `ssl1_backup` - (only in `XY_ST`) contains checkpoints of the model for the SSL stage on LUNA
+- `ssl2_backup` - (only in `XY_ST`) contains checkpoints of the model for the SSL stage on COVID-CT
 
 The scripts also need the datasets in the directory `sose2020-idv` of the and the data split file for COVID-CT dataset.
 
-It is assumed that the comments in the scripts will be read in this particular order:
-
-`PRED`, `RAND`, `RN_1`, `RN_2`, `RN_3`, `RN_ST`, `SC_1`, `SC_2`, `SC_3`, `SC_ST`
-
+It is assumed that the comments in the scripts will be read in this particular order:<br>
+`PRED`, `RAND`, `RN_1`, `RN_2`, `RN_3`, `RN_ST`, `SC_1`, `SC_2`, `SC_3`, `SC_ST`<br>
 Since the scripts are somewhat similar and some line sequences are repeated accross multiple scripts,
 the comments explaining those sequences are only written for their first appearances.
 
 Experiments also contain Jupyter Notebook (`ipynb`) files.
-Those files are the original scripts which were run on Google Colaboratory.
+Those files are the original scripts which were run on Google Colaboratory and their original output.
 The Python (`py`) files were exported along with those.
 
 Full knowledge of a script is recommended before trying to change any lines in the script. For example, if `train_epochs_end` is changed for the SSL stage on LUNA in Self-Trans scripts, then `ssl1_epochs` should also be changed for the SSL stage on COVID-CT in those scripts.
