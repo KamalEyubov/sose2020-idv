@@ -286,5 +286,5 @@ pip install -r path/to/denpendencies_resnet.txt
 <br>
 <br>
 <br>
-All scripts are adapted from the file COVID-CT/baseline methods/DenseNet169/DenseNet_predict.py and https://github.com/UCSD-AI4H/COVID-CT/blob/master/baseline%20methods/Self-Trans/CT-predict-pretrain.ipynb of the repository at https://github.com/UCSD-AI4H/COVID-CT.
+All scripts are adapted from the file COVID-CT/baseline methods/DenseNet169/DenseNet_predict.py, COVID-CT/blob/master/baseline%20methods/Self-Trans/CT-predict-pretrain.ipynb and COVID-CT/blob/master/baseline%20methods/Self-Trans/model/ResNet.py of the repository at https://github.com/UCSD-AI4H/COVID-CT.
 As such, all CT-scans of COVID-19 negative ("healthy") patients are designated as having the label of "1" and are considered "positive", and vice-versa.
