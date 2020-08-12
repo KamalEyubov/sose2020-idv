@@ -40,118 +40,17 @@ DenseNet169
 │   ├── PRET
 │   │   └── fine-tuning
 │   │       ├── bn_change.png
-│   │       ├── conv_change.png
-│   │       ├── fine-tuning_loss.png
-│   │       ├── gradcam.png
-│   │       └── validation_performance.png
+│   │       └── ...
 │   ├── RAND
-│   │   └── fine-tuning
-│   │       ├── bn_change.png
-│   │       ├── conv_change.png
-│   │       ├── fine-tuning_loss.png
-│   │       ├── gradcam.png
-│   │       └── validation_performance.png
+│   │   └── ...
 │   ├── RN_1
-│   │   ├── fine-tuning
-│   │   │   ├── bn_change.png
-│   │   │   ├── conv_change.png
-│   │   │   ├── fine-tuning_loss.png
-│   │   │   ├── gradcam.png
-│   │   │   └── validation_performance.png
+|   |   ├── fine-tuning
+│   │   │   └── ...
 │   │   └── ssl
-│   │       ├── bn_change.png
-│   │       ├── conv_change.png
-│   │       ├── gradcam.png
-│   │       └── ssl_loss.png
+│   │   │   └── ...
 │   ├── RN_2
-│   │   ├── fine-tuning
-│   │   │   ├── bn_change.png
-│   │   │   ├── conv_change.png
-│   │   │   ├── fine-tuning_loss.png
-│   │   │   ├── gradcam.png
-│   │   │   └── validation_performance.png
-│   │   └── ssl
-│   │       ├── bn_change.png
-│   │       ├── conv_change.png
-│   │       ├── gradcam.png
-│   │       └── ssl_loss.png
-│   ├── RN_3
-│   │   ├── fine-tuning
-│   │   │   ├── bn_change.png
-│   │   │   ├── conv_change.png
-│   │   │   ├── fine-tuning_loss.png
-│   │   │   ├── gradcam.png
-│   │   │   └── validation_performance.png
-│   │   └── ssl
-│   │       ├── bn_change.png
-│   │       ├── conv_change.png
-│   │       ├── gradcam.png
-│   │       └── ssl_loss.png
-│   ├── RN_ST
-│   │   ├── fine-tuning
-│   │   │   ├── bn_change.png
-│   │   │   ├── conv_change.png
-│   │   │   ├── fine-tuning_loss.png
-│   │   │   ├── gradcam.png
-│   │   │   └── validation_performance.png
-│   │   ├── ssl1
-│   │   │   ├── bn_change.png
-│   │   │   ├── conv_change.png
-│   │   │   ├── gradcam.png
-│   │   │   └── ssl1_loss.png
-│   │   └── ssl2
-│   │       ├── bn_change.png
-│   │       ├── conv_change.png
-│   │       ├── gradcam.png
-│   │       └── ssl2_loss.png
-│   ├── SC_1
-│   │   ├── fine-tuning
-│   │   │   ├── bn_change.png
-│   │   │   ├── conv_change.png
-│   │   │   ├── fine-tuning_loss.png
-│   │   │   ├── gradcam.png
-│   │   │   └── validation_performance.png
-│   │   └── ssl
-│   │       ├── bn_change.png
-│   │       ├── conv_change.png
-│   │       └── ssl_loss.png
-│   ├── SC_2
-│   │   ├── fine-tuning
-│   │   │   ├── bn_change.png
-│   │   │   ├── conv_change.png
-│   │   │   ├── fine-tuning_loss.png
-│   │   │   ├── gradcam.png
-│   │   │   └── validation_performance.png
-│   │   └── ssl
-│   │       ├── bn_change.png
-│   │       ├── conv_change.png
-│   │       └── ssl_loss.png
-│   ├── SC_3
-│   │   ├── fine-tuning
-│   │   │   ├── bn_change.png
-│   │   │   ├── conv_change.png
-│   │   │   ├── fine-tuning_loss.png
-│   │   │   ├── gradcam.png
-│   │   │   └── validation_performance.png
-│   │   └── ssl
-│   │       ├── bn_change.png
-│   │       ├── conv_change.png
-│   │       └── ssl_loss.png
-│   └── SC_ST
-│       ├── fine-tuning
-│       │   ├── bn_change.png
-│       │   ├── conv_change.png
-│       │   ├── fine-tuning_loss.png
-│       │   ├── gradcam.png
-│       │   └── validation_performance.png
-│       ├── ssl1
-│       │   ├── bn_change.png
-│       │   ├── conv_change.png
-│       │   └── ssl1_loss.png
-│       └── ssl2
-│           ├── bn_change.png
-│           ├── conv_change.png
-│           └── ssl2_loss.png
+│   │   └── ...
+|   └── ...
 ├── PRET
 │   ├── DN169_PRET.ipynb
 │   ├── dn169_pret.py
