@@ -388,7 +388,7 @@ Finally install the dependencies:<br>
 If you do not want to use a virtualenvironment just ignore the first 3 lines.<br>
 Instead after creating the dependencies textfile install the dependencies with following line in your shell:<br>
 ```
-pip install -r path/to/denpendencies_resnet.txt
+pip install -r path/to/denpendencies.txt
 ```
 <br>
 <br>
