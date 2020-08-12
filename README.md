@@ -211,7 +211,8 @@ A shortened naming for the experiments was used:
 - Method 1            = `XY_1`
 - Method 2            = `XY_2`
 - Method 3            = `XY_3`
-- Self-Trans          = `XY_ST`<br>
+- Self-Trans          = `XY_ST`
+
 `XY` can be either `RN` (RotNet) or `SC` (SimCLR).
 
 Each experiment is a single script, stages of which are all run at once. To run them, run the python script inside of those experiment directories.
