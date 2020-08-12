@@ -52,57 +52,67 @@ DenseNet169
 │   │   └── ...
 |   └── ...
 ├── PRET
+│   ├── clear.sh
 │   ├── DN169_PRET.ipynb
 │   ├── dn169_pret.py
 │   └── fine-tune.pt
 ├── RAND
+│   ├── clear.sh
 │   ├── DN169_RAND.ipynb
 │   ├── dn169_rand.py
 │   └── fine-tune.pt
 ├── RN_1
+│   ├── clear.sh
 │   ├── DN169_RN_1.ipynb
 │   ├── dn169_rn_1.py
 │   ├── fine-tune.pt
 │   └── ssl.pt
 ├── RN_2
+│   ├── clear.sh
 │   ├── DN169_RN_2.ipynb
 │   ├── dn169_rn_2.py
 │   ├── fine-tune.pt
 │   └── ssl.pt
 ├── RN_3
+│   ├── clear.sh
 │   ├── DN169_RN_3.ipynb
 │   ├── dn169_rn_3.py
 │   ├── fine-tune.pt
 │   └── ssl.pt
 ├── RN_ST
+│   ├── clear.sh
 │   ├── DN169_RN_ST.ipynb
 │   ├── dn169_rn_st.py
 │   ├── fine-tune.pt
 │   ├── ssl1.pt
 │   └── ssl2.pt
 ├── SC_1
+│   ├── clear.sh
 │   ├── DN169_SC_1.ipynb
 │   ├── dn169_sc_1.py
 │   ├── fine-tune.pt
 │   └── ssl.pt
 ├── SC_2
+│   ├── clear.sh
 │   ├── DN169_SC_2.ipynb
 │   ├── dn169_sc_2.py
 │   ├── fine-tune.pt
 │   └── ssl.pt
 ├── SC_3
+│   ├── clear.sh
 │   ├── DN169_SC_3.ipynb
 │   ├── dn169_sc_3.py
 │   ├── fine-tune.pt
 │   └── ssl.pt
 └── SC_ST
+    ├── clear.sh
     ├── DN169_SC_ST.ipynb
     ├── dn169_sc_st.py
     ├── fine-tune.pt
     ├── ssl1.pt
     └── ssl2.pt
 ```
-The directory `DenseNet169` includes all the experiments with the **DenseNet-169** model conducted by Kamal Eyubov. The subdirectory `plots` contains all plots from the original Google Colaboratory run of the scripts.
+The directory `DenseNet169` includes all the experiments with the **DenseNet-169** model conducted by Kamal Eyubov. The subdirectory `plots` contains all plots from the original Google Colaboratory runs of the scripts.
 
 A shortened naming for the experiments was used:
 - No SSL Random       = `RAND`
@@ -114,29 +124,33 @@ A shortened naming for the experiments was used:
 
 `XY` can be either `RN` (RotNet) or `SC` (SimCLR).
 
-Each experiment is a single script, stages of which are all run at once. To run them, run the python script inside of those experiment directories.
-For example, to run Self-Trans for SimCLR, run the script `sose2020-idv/DenseNet169/SC_ST/dn169_sc_st.py` (i.e. `python3 sose2020-idv/DenseNet169/SC_ST/dn169_sc_st.py`).
+Each experiment is a single script, stages of which are all run at once. To run them, execute the python script inside of those experiment directories.
+For example, to run Self-Trans for SimCLR, run the script `sose2020-idv/DenseNet169/SC_ST/dn169_sc_st.py` (i.e. `python3 sose2020-idv/DenseNet169/SC_ST/dn169_sc_st.py`). 
 
 For the scripts to be run, there should be no directories in the same folder with them as some directories are being generated during the execution,
-which in turn may lead to file name conflicts.
+which in turn may lead to file name conflicts. The script `clear.sh` should be run before repeated executions of python scripts. `clear.sh` clears a folder from the directories created during previous executions of python scripts.
 The scripts generate the following directories:
 - `model_backup` - contains checkpoints of the model for the fine-tuning stage
+- `model_result` - contains logs from the fine-tuning stage
 - `ssl_backup` - (only in `XY_1`, `XY_2`, `XY_3`) contains checkpoints of the model for the SSL stage
+- `ssl_result` - (only in `XY_1`, `XY_2`, `XY_3`) contains logs from the SSL stage
 - `ssl1_backup` - (only in `XY_ST`) contains checkpoints of the model for the SSL stage on LUNA
+- `ssl1_result` - (only in `XY_ST`) contains logs from the SSL stage on LUNA
 - `ssl2_backup` - (only in `XY_ST`) contains checkpoints of the model for the SSL stage on COVID-CT
+- `ssl2_result` - (only in `XY_ST`) contains logs from the SSL stage on COVID-CT
 
-The scripts also need the datasets in the directory `sose2020-idv` of the and the data split file for COVID-CT dataset.
+The scripts also need the datasets in the directory `sose2020-idv` and the data split files for COVID-CT dataset.
 
 It is assumed that the comments in the scripts will be read in this particular order:<br>
 `PRED`, `RAND`, `RN_1`, `RN_2`, `RN_3`, `RN_ST`, `SC_1`, `SC_2`, `SC_3`, `SC_ST`<br>
 Since the scripts are somewhat similar and some line sequences are repeated accross multiple scripts,
 the comments explaining those sequences are only written for their first appearances.
 
-Experiments also contain Jupyter Notebook (`ipynb`) files.
+Directories also contain Jupyter Notebook (`ipynb`) files.
 Those files are the original scripts which were run on Google Colaboratory and their original output.
-The Python (`py`) files were exported along with those.
+The Python (`py`) files were extracted from those notebooks and partially modified to be able to be run outside notebooks.
 
-Full knowledge of a script is recommended before trying to change any lines in the script. For example, if `train_epochs_end` is changed for the SSL stage on LUNA in Self-Trans scripts, then `ssl1_epochs` should also be changed for the SSL stage on COVID-CT in those scripts.
+Full knowledge of the scripts is recommended before trying to change any lines in them. For example, if `train_epochs_end` is changed for the SSL stage on LUNA in Self-Trans scripts, then `ssl1_epochs` should also be changed for the SSL stage on COVID-CT in those scripts. Otherwise, errors might occur.
 
 ## ResNet50
 ```
