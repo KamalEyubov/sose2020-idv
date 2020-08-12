@@ -136,9 +136,46 @@ Summer Semester 2020 Deep Vision Project
 
 
 ## DenseNet169
+This directory includes all the experiments with the **DenseNet169** model conducted by Kamal Eyubov.
+
+A shortened naming for the experiments was used:
+No SSL Random       = `RAND`
+No SSL Pre-trained  = `PRET`
+Method 1            = `XY_1`
+Method 2            = `XY_2`
+Method 3            = `XY_3`
+Self-Trans          = `XY_ST`
+`XY` can be either `RN` (RotNet) or `SC` (SimCLR).
+
+Each experiment is a single script, stages of which are all run at once. To run them, run the python script inside of those experiment directories.
+For example, to run Self-Trans for SimCLR, run the script `sose2020-idv/DenseNet169/SC_ST/dn169_sc_st.py` (i.e. `python3 sose2020-idv/DenseNet169/SC_ST/dn169_sc_st.py`).
+
+For the scripts to be run, there should be no directories in the same folder with them as some directories are being generated during the execution,
+which in turn may lead to file name conflicts.
+The scripts generate the following directories:
+`model_backup` - contains checkpoints of the model for the fine-tuning stage
+`ssl_backup` - (only in `XY_1`, `XY_2`, `XY_3`) contains checkpoints of the model for the SSL stage
+`ssl1_backup` - (only in `XY_ST`) contains checkpoints of the model for the SSL stage on LUNA
+`ssl2_backup` - (only in `XY_ST`) contains checkpoints of the model for the SSL stage on COVID-CT
+
+The scripts also need the datasets in the directory `sose2020-idv` of the and the data split file for COVID-CT dataset.
+
+It is assumed that the comments in the scripts will be read in this particular order:
+`PRED`, `RAND`, `RN_1`, `RN_2`, `RN_3`, `RN_ST`, `SC_1`, `SC_2`, `SC_3`, `SC_ST`
+Since the scripts are somewhat similar and some line sequences are repeated accross multiple scripts,
+the comments explaining those sequences are only written for their first appearances.
+
+Experiments also contain Jupyter Notebook (`ipynb`) files.
+Those files are the original scripts which were run on Google Colaboratory.
+The Python (`py`) files were exported along with those.
+
+All scripts are adapted from the file COVID-CT/baseline methods/DenseNet169/DenseNet_predict.py of the repository at https://github.com/UCSD-AI4H/COVID-CT.
+As such, all CT-scans of COVID-19 negative ("healthy") patients are designated as having the label of "1" and are considered "positive", and vice-versa.
+
+
 ## ResNet50
 After installing the dependencies change into the directory of **RotNet** or **SimCLR** depending on which SSL approach you want to run (i.e. cd sose2020-idv/ResNet50/rotnet).<br>
-After changing into the directory of rotnet or simClr run the **pipe.py** file (i.e. python pipe.py) with python3.<br> This starts the pipeline of running all the methods one after another.<br> For **RotNet** this would be: 
+After changing into the directory of rotnet or simClr run the `pipe.py` file (i.e. python pipe.py) with python3.<br> This starts the pipeline of running all the methods one after another.<br> For **RotNet** this would be: 
 - no SSL and no pre-training (noSslNoPretrain.py)
 - no SSL with pretraining (noSslWithPretrain.py)
 - RotNet Method 1 (sslRotateNoPretrain.py + sslRotateNoPretrainFinetune.py)
