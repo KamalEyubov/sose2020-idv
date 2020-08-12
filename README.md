@@ -136,7 +136,7 @@ Summer Semester 2020 Deep Vision Project
 
 
 ## DenseNet169
-This directory includes all the experiments with the **ResNet50** model conducted by Kamal Eyubov.
+The directory `DenseNet169` includes all the experiments with the **DenseNet-169** model conducted by Kamal Eyubov.
 
 A shortened naming for the experiments was used:
 * No SSL Random       = `RAND`
@@ -171,6 +171,8 @@ the comments explaining those sequences are only written for their first appeara
 Experiments also contain Jupyter Notebook (`ipynb`) files.
 Those files are the original scripts which were run on Google Colaboratory.
 The Python (`py`) files were exported along with those.
+
+Full knowledge of a script is recommended before trying to change any lines in the script. For example, if `train_epochs_end` is changed for the SSL stage on LUNA in Self-Trans scripts, then `ssl1_epochs` should also be changed for the SSL stage on COVID-CT in those scripts.
 
 ## ResNet50
 This directory includes all the experiments with the **ResNet50** model conducted by Gabriel Rashidi.<br><br>
