@@ -1,5 +1,5 @@
 import torchvision.transforms as transforms
-from covidDataSet import *
+from util.covidDataSet import *
 
 
 def getTransforms():

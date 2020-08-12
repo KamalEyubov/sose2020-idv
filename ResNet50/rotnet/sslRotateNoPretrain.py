@@ -18,7 +18,7 @@ from util.dataloadersGeneration import *
 from util.trainValTest import *
 from util.evaluation import *
 import torchvision.models as models
-from resNet import *
+from util.resNet import *
 import warnings
 warnings.filterwarnings('ignore')
 

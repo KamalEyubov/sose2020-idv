@@ -18,7 +18,7 @@ from util.dataloadersGeneration import *
 from util.trainValTest import *
 from util.evaluation import *
 import torchvision.models as models
-from resNet import *
+from util.resNet import *
 import warnings
 warnings.filterwarnings('ignore')
 
@@ -71,7 +71,7 @@ if __name__ == '__main__':
 
         if epoch % votenum == 0:
             eval.computeStatistics()
-        
+
             print('\n The epoch is {}, average recall: {:.4f}, average precision: {:.4f},\
             average F1: {:.4f}, average accuracy: {:.4f}, average AUC: {:.4f}'.format(
                     epoch, eval.getRecall(), eval.getPrecision(), eval.getF1(), eval.getAccuracy(), eval.getAUC()))
