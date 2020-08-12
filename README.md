@@ -3,139 +3,210 @@ Summer Semester 2020 Deep Vision Project
 
 ```
 .
+├── bn.png
+├── conv.png
 ├── Data-split
 │   ├── COVID
-│   │     Contains Covid-positive data-split
-│   │   
-│   │   
+│   │   ├── testCT_COVID.txt
+│   │   ├── trainCT_COVID.txt
+│   │   └── valCT_COVID.txt
 │   └── NonCOVID
-│       Contains Covid-negative data-split
-│       
-│       
+│       ├── testCT_NonCOVID.txt
+│       ├── trainCT_NonCOVID.txt
+│       └── valCT_NonCOVID.txt
 ├── DenseNet169
-│   ├── plots
-│   │   ├── PRET
-│   │   │  
-│   │   │       
-│   │   │      
-│   │   │     
-│   │   │      
-│   │   │       
-│   │   ├── RAND
-│   │   │   
-│   │   │      
-│   │   │      
-│   │   │     
-│   │   │      
-│   │   │       
-│   │   ├── RN_1
-│   │   │   ├── fine-tuning
-│   │   │   │   
-│   │   │   │   
-│   │   │   │   
-│   │   │   │   
-│   │   │   │  
-│   │   │   └── ssl
-│   │   │       
-│   │   │       
-│   │   │       
-│   │   │       
-│   │   ├── RN_2
-│   │   │   ├── fine-tuning
-|   |   |   |
-│   │   │   └── ssl
-│   │   │    
-│   │   ├── RN_3
-│   │   │   ├── fine-tuning
-│   │   │   │  
-│   │   │   └── ssl
-│   │   │    
-│   │   ├── RN_ST
-│   │   │   ├── fine-tuning
-│   │   │   |
-│   │   │   ├── ssl1
-│   │   │   │ 
-│   │   │   └── ssl2
-│   │   │     
-│   │   ├── SC_1
-│   │   │   ├── fine-tuning
-│   │   │   │  
-│   │   │   └── ssl
-│   │   │      
-│   │   ├── SC_2
-│   │   │   ├── fine-tuning
-│   │   │   │  
-│   │   │   └── ssl
-│   │   │      
-│   │   ├── SC_3
-│   │   │   ├── fine-tuning
-│   │   │   │  
-│   │   │   └── ssl
-│   │   │     
-│   │   └── SC_ST
-│   │       ├── fine-tuning
-│   │       │  
-│   │       ├── ssl1
-│   │       │  
-│   │       └── ssl2
-│   │          
-│   ├── PRET
-│   │  
-│   ├── RAND
-│   │  
-│   ├── RN_1
-│   │  
-│   ├── RN_2
-│   │  
-│   ├── RN_3
-│   │  
-│   ├── RN_ST
-│   │  
-│   ├── SC_1
-│   │  
-│   ├── SC_2
-│   │  
-│   ├── SC_3
-│   │  
-│   └── SC_ST
-│      
+│   └── ...
 ├── Images
 │   ├── CT_COVID
-|   |       Contains positive COVID-CT scans from the COVID-CT dataset
-│   │  
+│   │   ├── 2019-novel-Coronavirus-severe-adult-respiratory-dist_2020_International-Jour-p3-89%0.png
+│   │   ├── ...
+│   │   └── Talaromyces-marneffei-infection-relapse-presenting-as-ost_2020_International-p1-12%3.png
 │   └── CT_NonCOVID
-|           Contains negative COVID-CT scans from the COVID-CT dataset
-│      
+│       ├── 0.jpg
+│       ├── ...
+│       └── 9.jpg
 ├── LUNA
-|       Contains the LUNA dataset
-│  
+│   ├── 1.3.6.1.4.1.14519.5.2.1.6279.6001.100530488926682752765845212286.mhd_154.png
+│   ├── ...
+│   └── 1.3.6.1.4.1.14519.5.2.1.6279.6001.975426625618184773401026809852.mhd_99.png
 ├── README.md
 ├── ResNet50
-│  
-│   ├── rotnet
-│   │   |    Contains all methods for RotNet including training with no SSL and random weights 
-|   |   |    and training with  no SSL and pre-trained weights
-|   |   |    Contains pipe.py for running the training for all methods
-|   |   |    Contains grad_cam.py for RotNet
-│   │   └── util
-|   |           Contains auxillary files i.e. defining the training function
-│   │    
-│   ├── simClr
-|   |   |    Contains all methods for SimCLR
-|   |   |    Contains pipe.py for running the training for all methods
-|   |   |    Contains grad_cam.py for SimCLR
-│   │   |
-│   │   └── util
-│   │           Contains auxillary files i.e. defining the training function
-│  
-├── ResNet50RotNetSelfTransConv.png
-├── ResNet50RotNetSelfTransNorm.png
+│   └── ...
 └── weightChangePlot.py
-
 ```
 
 
 ## DenseNet169
+```
+DenseNet169
+├── plots
+│   ├── PRET
+│   │   └── fine-tuning
+│   │       ├── bn_change.png
+│   │       ├── conv_change.png
+│   │       ├── fine-tuning_loss.png
+│   │       ├── gradcam.png
+│   │       └── validation_performance.png
+│   ├── RAND
+│   │   └── fine-tuning
+│   │       ├── bn_change.png
+│   │       ├── conv_change.png
+│   │       ├── fine-tuning_loss.png
+│   │       ├── gradcam.png
+│   │       └── validation_performance.png
+│   ├── RN_1
+│   │   ├── fine-tuning
+│   │   │   ├── bn_change.png
+│   │   │   ├── conv_change.png
+│   │   │   ├── fine-tuning_loss.png
+│   │   │   ├── gradcam.png
+│   │   │   └── validation_performance.png
+│   │   └── ssl
+│   │       ├── bn_change.png
+│   │       ├── conv_change.png
+│   │       ├── gradcam.png
+│   │       └── ssl_loss.png
+│   ├── RN_2
+│   │   ├── fine-tuning
+│   │   │   ├── bn_change.png
+│   │   │   ├── conv_change.png
+│   │   │   ├── fine-tuning_loss.png
+│   │   │   ├── gradcam.png
+│   │   │   └── validation_performance.png
+│   │   └── ssl
+│   │       ├── bn_change.png
+│   │       ├── conv_change.png
+│   │       ├── gradcam.png
+│   │       └── ssl_loss.png
+│   ├── RN_3
+│   │   ├── fine-tuning
+│   │   │   ├── bn_change.png
+│   │   │   ├── conv_change.png
+│   │   │   ├── fine-tuning_loss.png
+│   │   │   ├── gradcam.png
+│   │   │   └── validation_performance.png
+│   │   └── ssl
+│   │       ├── bn_change.png
+│   │       ├── conv_change.png
+│   │       ├── gradcam.png
+│   │       └── ssl_loss.png
+│   ├── RN_ST
+│   │   ├── fine-tuning
+│   │   │   ├── bn_change.png
+│   │   │   ├── conv_change.png
+│   │   │   ├── fine-tuning_loss.png
+│   │   │   ├── gradcam.png
+│   │   │   └── validation_performance.png
+│   │   ├── ssl1
+│   │   │   ├── bn_change.png
+│   │   │   ├── conv_change.png
+│   │   │   ├── gradcam.png
+│   │   │   └── ssl1_loss.png
+│   │   └── ssl2
+│   │       ├── bn_change.png
+│   │       ├── conv_change.png
+│   │       ├── gradcam.png
+│   │       └── ssl2_loss.png
+│   ├── SC_1
+│   │   ├── fine-tuning
+│   │   │   ├── bn_change.png
+│   │   │   ├── conv_change.png
+│   │   │   ├── fine-tuning_loss.png
+│   │   │   ├── gradcam.png
+│   │   │   └── validation_performance.png
+│   │   └── ssl
+│   │       ├── bn_change.png
+│   │       ├── conv_change.png
+│   │       └── ssl_loss.png
+│   ├── SC_2
+│   │   ├── fine-tuning
+│   │   │   ├── bn_change.png
+│   │   │   ├── conv_change.png
+│   │   │   ├── fine-tuning_loss.png
+│   │   │   ├── gradcam.png
+│   │   │   └── validation_performance.png
+│   │   └── ssl
+│   │       ├── bn_change.png
+│   │       ├── conv_change.png
+│   │       └── ssl_loss.png
+│   ├── SC_3
+│   │   ├── fine-tuning
+│   │   │   ├── bn_change.png
+│   │   │   ├── conv_change.png
+│   │   │   ├── fine-tuning_loss.png
+│   │   │   ├── gradcam.png
+│   │   │   └── validation_performance.png
+│   │   └── ssl
+│   │       ├── bn_change.png
+│   │       ├── conv_change.png
+│   │       └── ssl_loss.png
+│   └── SC_ST
+│       ├── fine-tuning
+│       │   ├── bn_change.png
+│       │   ├── conv_change.png
+│       │   ├── fine-tuning_loss.png
+│       │   ├── gradcam.png
+│       │   └── validation_performance.png
+│       ├── ssl1
+│       │   ├── bn_change.png
+│       │   ├── conv_change.png
+│       │   └── ssl1_loss.png
+│       └── ssl2
+│           ├── bn_change.png
+│           ├── conv_change.png
+│           └── ssl2_loss.png
+├── PRET
+│   ├── DN169_PRET.ipynb
+│   ├── dn169_pret.py
+│   └── fine-tune.pt
+├── RAND
+│   ├── DN169_RAND.ipynb
+│   ├── dn169_rand.py
+│   └── fine-tune.pt
+├── README.md
+├── RN_1
+│   ├── DN169_RN_1.ipynb
+│   ├── dn169_rn_1.py
+│   ├── fine-tune.pt
+│   └── ssl.pt
+├── RN_2
+│   ├── DN169_RN_2.ipynb
+│   ├── dn169_rn_2.py
+│   ├── fine-tune.pt
+│   └── ssl.pt
+├── RN_3
+│   ├── DN169_RN_3.ipynb
+│   ├── dn169_rn_3.py
+│   ├── fine-tune.pt
+│   └── ssl.pt
+├── RN_ST
+│   ├── DN169_RN_ST.ipynb
+│   ├── dn169_rn_st.py
+│   ├── fine-tune.pt
+│   ├── ssl1.pt
+│   └── ssl2.pt
+├── SC_1
+│   ├── DN169_SC_1.ipynb
+│   ├── dn169_sc_1.py
+│   ├── fine-tune.pt
+│   └── ssl.pt
+├── SC_2
+│   ├── DN169_SC_2.ipynb
+│   ├── dn169_sc_2.py
+│   ├── fine-tune.pt
+│   └── ssl.pt
+├── SC_3
+│   ├── DN169_SC_3.ipynb
+│   ├── dn169_sc_3.py
+│   ├── fine-tune.pt
+│   └── ssl.pt
+└── SC_ST
+    ├── DN169_SC_ST.ipynb
+    ├── dn169_sc_st.py
+    ├── fine-tune.pt
+    ├── ssl1.pt
+    └── ssl2.pt
+```
 The directory `DenseNet169` includes all the experiments with the **DenseNet-169** model conducted by Kamal Eyubov. The subdirectory `plots` contains all plots from the original Google Colaboratory run of the scripts.
 
 A shortened naming for the experiments was used:
@@ -172,6 +243,47 @@ The Python (`py`) files were exported along with those.
 Full knowledge of a script is recommended before trying to change any lines in the script. For example, if `train_epochs_end` is changed for the SSL stage on LUNA in Self-Trans scripts, then `ssl1_epochs` should also be changed for the SSL stage on COVID-CT in those scripts.
 
 ## ResNet50
+```
+ResNet50
+├── rotnet
+│   ├── grad_cam.py
+│   ├── noSslNoPretrain.py
+│   ├── noSslWithPretrain.py
+│   ├── pipe.py
+│   ├── sslRotateNoPretrainFinetune.py
+│   ├── sslRotateNoPretrain.py
+│   ├── sslRotateWithPretrainFinetune.py
+│   ├── sslRotateWithPretrainLUNAFinetune.py
+│   ├── sslRotateWithPretrainLUNA.py
+│   ├── sslRotateWithPretrainLUNAsslRotateFinetune.py
+│   ├── sslRotateWithPretrainLUNAsslRotate.py
+│   ├── sslRotateWithPretrain.py
+│   └── util
+│       ├── covidDataSet.py
+│       ├── dataloadersGeneration.py
+│       ├── evaluation.py
+│       ├── __init__.py
+│       ├── resNet.py
+│       └── trainValTest.py
+└── simClr
+    ├── grad_cam.py
+    ├── pipe.py
+    ├── sslSimClrNoPretrainFinetune.py
+    ├── sslSimClrNoPretrain.py
+    ├── sslSimClrWithPretrainFinetune.py
+    ├── sslSimClrWithPretrainLUNAFinetune.py
+    ├── sslSimClrWithPretrainLUNA.py
+    ├── sslSimClrWithPretrainLUNAsslSimClrFinetune.py
+    ├── sslSimClrWithPretrainLUNAsslSimClr.py
+    ├── sslSimClrWithPretrain.py
+    └── util
+        ├── covidDataSet.py
+        ├── dataloadersGeneration.py
+        ├── evaluation.py
+        ├── __init__.py
+        ├── resNet.py
+        └── trainValTest.py
+```
 This directory includes all the experiments with the **ResNet50** model conducted by Gabriel Rashidi.<br><br>
 
 After installing the dependencies change into the directory of **RotNet** or **SimCLR** depending on which SSL approach you want to run (i.e. cd sose2020-idv/ResNet50/rotnet).<br>
